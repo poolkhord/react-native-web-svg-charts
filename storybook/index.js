@@ -16,6 +16,7 @@ export default () => {
         {StorybookArray.map(({ title }, index) => {
           return (
             <TouchableOpacity
+              key={String(index)}
               style={[
                 styles.menuItem,
                 selectedStory === index && styles.menuItemSelected,
@@ -32,7 +33,7 @@ export default () => {
       <View style={styles.screenContainer}>
         <ScrollView>
           {StorybookArray.map(({ component: Story }, index) => {
-            return selectedStory === index && <Story />;
+            return selectedStory === index && <Story key={String(index)} />;
           })}
         </ScrollView>
       </View>

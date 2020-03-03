@@ -88,12 +88,14 @@ class Chart extends PureComponent {
     });
 
     const ticks = y.ticks(numberOfTicks);
+    const ticksX = x.ticks(numberOfTicks);
 
     const extraProps = {
       x,
       y,
       data,
       ticks,
+      ticksX,
       width,
       height,
       ...paths,

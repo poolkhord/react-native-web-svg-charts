@@ -21,10 +21,10 @@ const Horizontal = ({ ticks = [], y, svg }) => {
   );
 };
 
-const Vertical = ({ ticks = [], x, svg }) => {
+const Vertical = ({ ticksX = [], x, svg }) => {
   return (
     <G>
-      {ticks.map((tick, index) => (
+      {ticksX.map((tick, index) => (
         <Line
           key={index}
           y1={"0%"}

@@ -12,4 +12,4 @@ const Others = () => (
   </ShowcaseCard>
 );
 
-export default Others
+export default Others;

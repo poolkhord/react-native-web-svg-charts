@@ -9,7 +9,7 @@ import WithYMinMax from "./with-y-min-max";
 import WithOnPress from "./with-on-press";
 import ShowcaseCard from "../showcase-card";
 
- const BarChart = () => (
+const BarChart = () => (
   <ShowcaseCard title="Bar chart">
     <Standard />
     <Grouped />
@@ -20,4 +20,4 @@ import ShowcaseCard from "../showcase-card";
     <WithYMinMax />
   </ShowcaseCard>
 );
-export default BarChart
+export default BarChart;

@@ -8,4 +8,4 @@ const YAxis = () => (
   </ShowcaseCard>
 );
 
-export default YAxis
+export default YAxis;

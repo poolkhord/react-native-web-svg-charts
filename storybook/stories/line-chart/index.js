@@ -15,4 +15,4 @@ const LineChart = () => (
   </ShowcaseCard>
 );
 
-export default LineChart
+export default LineChart;

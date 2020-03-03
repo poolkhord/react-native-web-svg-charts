@@ -12,4 +12,4 @@ const ProgressCircle = () => (
   </ShowcaseCard>
 );
 
-export default ProgressCircle
+export default ProgressCircle;

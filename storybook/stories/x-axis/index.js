@@ -14,4 +14,4 @@ const XAxis = () => (
   </ShowcaseCard>
 );
 
-export default XAxis
+export default XAxis;

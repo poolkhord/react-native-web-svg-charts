@@ -5,8 +5,14 @@
   "description": "(fork react-native-svg-charts) Customizable charts (Line, Bar, Area, Pie, Circle, Progress) for React Native (web)",
   "main": "src/index.js",
   "scripts": {
+    "lint": "eslint --ext '.js' .",
     "test": "jest"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/poolkhord/react-native--web-svg-charts.git"
+  },
+  "author": "Hossein mohammadi (https://github.com/hosseinmd)",
   "dependencies": {
     "d3-array": "^2.4.0",
     "d3-interpolate-path": "^2.1.2",
@@ -38,12 +44,24 @@
     "react-native-reanimated": "^1.7.0",
     "react-native-web": "^0.12.1",
     "react-scripts": "^3.4.0",
-    "react-test-renderer": "^16.12.0",
-    "typescript": "3.4.3"
+    "react-test-renderer": "^16.12.0"
   },
   "peerDependencies": {
     "react": ">=16.12",
     "react-native": ">=0.61",
     "react-native-svg": "^6.2.1||^7.0.3"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "yarn lint"
+    }
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.(js)$": "babel-jest"
+    },
+    "preset": "react-native"
   }
 }

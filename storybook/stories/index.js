@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import AreaChart from "./area-chart";
 import AreaStack from "./area-stack";
 import BarChart from "./bar-chart";

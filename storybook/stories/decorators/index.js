@@ -12,4 +12,4 @@ export const Decorators = () => (
   </ShowcaseCard>
 );
 
-export default Decorators
+export default Decorators;

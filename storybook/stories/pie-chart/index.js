@@ -12,4 +12,4 @@ const PieChart = () => (
   </ShowcaseCard>
 );
 
-export default PieChart
+export default PieChart;

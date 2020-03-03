@@ -17,4 +17,4 @@ const BarStack = () => (
   </ShowcaseCard>
 );
 
-export default BarStack
+export default BarStack;

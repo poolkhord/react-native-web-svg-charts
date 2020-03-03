@@ -56,23 +56,6 @@ We're very proud of our "decorator" support. All charts can be extended with "de
 Simply pass in a `react-native-svg` compliant component as a child to the graph and it will be called with all the necessary information to layout your decorator.
 See each chart for information on what data the decorator will be called with.
 
-Feedback and PR's are more than welcome 🙂
-
-## Running
-
-Clone the repo and run the following:
-
-```bash
-yarn
-
-cd web
-
-yarn
-
-yarn start
-
-```
-
 ## Common Props
 
 | Property          | Default                                  | Description                                                                                                                                                                                                                                                    |
@@ -339,7 +322,7 @@ Also see [Common Props](#common-props)
 | ------------ | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | data         | **required**                               | The data prop in a barChart can look exactly like in a Line- or AreaChart, i.e an array of just numbers or complex objects. It can however also be an array with several data sets. A data object can contain a `svg` property which allows you two override styles on that specific object. See [the examples repo](https://github.com/JesperLekland/react-native-web-svg-charts-examples) |
 | horizontal   | false                                      | Boolean whether or not the bars should be horizontal                                                                                                                                                                                                                                                                                                                                        |
-| svg          | `{}`                                       | Default svg props **for all bars**. Supports all svg props an svg path normally supports. This styles will be overridden if there are specific styles for a given data object                                                                                                                                                                                                                |
+| svg          | `{}`                                       | Default svg props **for all bars**. Supports all svg props an svg path normally supports. This styles will be overridden if there are specific styles for a given data object                                                                                                                                                                                                               |
 | spacingInner | 0.05                                       | Spacing between the bars (or groups of bars)                                                                                                                                                                                                                                                                                                                                                |
 | spacingOuter | 0.05                                       | Spacing outside of the bars (or groups of bars). Percentage of one bars width                                                                                                                                                                                                                                                                                                               |
 | contentInset | `{ top: 0, left: 0, right: 0, bottom: 0 }` | PropTypes.shape                                                                                                                                                                                                                                                                                                                                                                             |
@@ -773,7 +756,7 @@ class XAxisExample extends React.PureComponent {
 | scale        | `d3Scale.scaleLinear` | Should be the same as passed into the charts `xScale`                                                                                                                                                                                                                                                                                                   |
 | spacingInner | 0.05                  | Spacing between the labels. Only applicable if `scale=d3Scale.scaleBand` and should then be equal to `spacingInner` prop on the actual BarChart                                                                                                                                                                                                         |
 | spacingOuter | 0.05                  | Spacing between the labels. Only applicable if `scale=d3Scale.scaleBand` and should then be equal to `spacingOuter` prop on the actual BarChart                                                                                                                                                                                                         |
-| svg          | `{}`                  | Default svg props **for all labels**. Supports all svg props an svg text normally supports. This styles will be overridden if there are specific styles for a given data object                                                                                                                                                                          |
+| svg          | `{}`                  | Default svg props **for all labels**. Supports all svg props an svg text normally supports. This styles will be overridden if there are specific styles for a given data object                                                                                                                                                                         |
 | formatLabel  | `value => value`      | A utility function to format the text before it is displayed, e.g `value => "day" + value`. Passes back the value provided by the `xAccessor`                                                                                                                                                                                                           |
 | contentInset | { left: 0, right: 0 } | Used to sync layout with chart (if same prop used there)                                                                                                                                                                                                                                                                                                |
 
@@ -802,3 +785,22 @@ Simply place it as child to the chart of your choice and (if necessary) set its 
 | svg        | `{}`                      | an object containing all the props that should be passed down to the underlying `react-native-svg` component. [See available props](https://github.com/react-native-community/react-native-svg#common-props) |
 | direction  | Grid.Direction.HORIZONTAL | The direction of the grid lines.                                                                                                                                                                             |
 | belowChart | true                      | whether or not to render below the chart                                                                                                                                                                     |
+
+## Contributing
+
+Feedback and PR's are more than welcome 🙂
+
+#### Running
+
+Clone the repo and run the following:
+
+```bash
+yarn
+
+cd web
+
+yarn
+
+yarn start
+
+```

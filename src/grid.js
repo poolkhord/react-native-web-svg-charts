@@ -78,13 +78,17 @@ const Direction = {
 };
 
 /**
- * @typedef {object} GridProps
+ * @typedef {object} _GridProps
  * @property {(keyof Direction)} [direction] default `HORIZONTAL`
  * @property {boolean} [belowChart] default true
  */
 
 /**
- * @type {React.FC<VerticalLinesProps & HorizontalLinesProps & GridProps>}
+ * @typedef {VerticalLinesProps & HorizontalLinesProps & _GridProps} GridProps
+ */
+
+/**
+ * @type {React.FC<GridProps>}
  */
 const Grid = memo(
   ({ direction = Direction.HORIZONTAL, belowChart = true, ...props }) => {

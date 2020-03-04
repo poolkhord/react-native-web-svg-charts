@@ -1,106 +1,134 @@
-import React, { Component } from "react";
-import { InteractionManager } from "react-native";
-import PropTypes from "prop-types";
+import React, { useState, useRef, memo } from "react";
+import Animated, {
+  set,
+  timing,
+  Value,
+  Clock,
+  Easing,
+  block,
+  cond,
+  call,
+  useCode,
+  clockRunning,
+  startClock,
+  stopClock,
+} from "react-native-reanimated";
 import { Path } from "react-native-svg";
-import * as interpolate from "d3-interpolate-path";
+import { interpolatePath } from "d3-interpolate-path";
 
-class AnimatedPath extends Component {
-  constructor(props) {
-    super(props);
+const RNAnimatedPath = Animated.createAnimatedComponent(Path);
 
-    this.state = { d: props.d };
-  }
+/**
+ * @typedef {object} _AnimatedPathProps
+ * @property {boolean} [animate] Default id `false`
+ * @property {number} [animationDuration] Default is `300`
+ */
 
-  componentDidUpdate(props) {
-    const { d: newD, animate } = this.props;
-    const { d: oldD } = props;
+/**
+ * @typedef {import("react-native-svg").PathProps & _AnimatedPathProps} AnimatedPathProps
+ */
+const AnimatedPath = memo(
+  ({ d, animationDuration = 300, animate = false, ...props }) => {
+    const isMount = useRef(false);
+    const [newD, setNewD] = useState(d);
 
-    this.newD = newD;
+    const clock = useRef(new Clock());
+    const value = new Value(0);
+    const dest = useRef(new Value(1));
 
-    if (newD === oldD) {
-      return;
-    }
+    const state = useRef({
+      finished: new Value(0),
+      position: value,
+      time: new Value(0),
+      frameTime: new Value(0),
+    }).current;
 
-    if (!animate || newD === null || oldD === null) {
-      return;
-    }
+    const config = {
+      duration: animationDuration,
+      toValue: dest.current,
+      easing: Easing.out(Easing.quad),
+    };
 
-    this.newD = newD;
-    this.interpolator = interpolate.interpolatePath(oldD, newD);
+    const _interpolate = interpolatePath(newD, d);
 
-    this._animate();
-  }
+    useCode(() => {
+      const code =
+        animate &&
+        isMount.current &&
+        block([
+          cond(clockRunning(clock.current), 0, [
+            // If the clock isn't running we reset all the animation params and start the clock
+            set(state.finished, 0),
+            set(state.time, 0),
+            set(state.position, value),
+            set(state.frameTime, 0),
+            set(config.toValue, dest.current),
+            startClock(clock.current),
+          ]),
+          // we run the step here that is going to update position
+          timing(clock.current, state, config),
+          // if the animation is over we stop the clock
+          cond(
+            state.finished,
+            stopClock(clock.current),
+            call([state.position], p => {
+              setNewD(_interpolate(p));
+            }),
+          ),
+        ]);
 
-  componentWillUnmount() {
-    cancelAnimationFrame(this.animation);
-    this._clearInteraction();
-  }
-
-  _animate(start) {
-    cancelAnimationFrame(this.animation);
-    this.animation = requestAnimationFrame(timestamp => {
-      if (!start) {
-        this._clearInteraction();
-        this.handle = InteractionManager.createInteractionHandle();
-
-        start = timestamp;
+      if (!animate) {
+        setNewD(_interpolate(1));
       }
-
-      // Get the delta on how far long in our animation we are.
-      const delta = (timestamp - start) / this.props.animationDuration;
-
-      // If we're above 1 then our animation should be complete.
-      if (delta > 1) {
-        // Just to be safe set our final value to the new graph path.
-        this.component.setNativeProps({ d: this.newD });
-        // Stop our animation loop.
-        this._clearInteraction();
-        return;
-      }
-
-      const d = this.interpolator(delta);
-      this.component.setNativeProps({ d });
-      // console.log(this.interpolator)
-      // this.tween && console.log(this.tween.tween(delta))
-      // Tween the SVG path value according to what delta we're currently at.
-
-      // Update our state with the new tween value and then jump back into
-      // this loop.
-      this.setState(this.state, () => {
-        this._animate(start);
-      });
-    });
-  }
-
-  _clearInteraction() {
-    if (this.handle) {
-      InteractionManager.clearInteractionHandle(this.handle);
-      this.handle = null;
-    }
-  }
-
-  render() {
+      isMount.current = true;
+      return code;
+    }, [d]);
+    // const _d = interpolate(d, oldD.current);
     return (
-      <Path
-        ref={ref => (this.component = ref)}
-        {...this.props}
-        d={this.props.animate ? this.state.d : this.props.d}
-      />
+      <>
+        <RNAnimatedPath
+          d={newD}
+          // d={bInterpolatePath(progress, rhino, elephant)}
+          {...props}
+        />
+      </>
     );
-  }
-}
+  },
+);
 
-AnimatedPath.propTypes = {
-  animate: PropTypes.bool,
-  animationDuration: PropTypes.number,
-  renderPlaceholder: PropTypes.func,
-  ...Path.propTypes,
-};
-
-AnimatedPath.defaultProps = {
-  animate: false,
-  animationDuration: 300,
-  renderPlaceholder: () => null,
-};
+AnimatedPath.defaultProps = {};
 
 export default AnimatedPath;
+
+export function runTiming(clock, value, dest, callback) {
+  const state = {
+    finished: new Value(0),
+    position: value,
+    time: new Value(0),
+    frameTime: new Value(0),
+  };
+
+  const config = {
+    duration: 300,
+    toValue: dest,
+    easing: Easing.out(Easing.quad),
+  };
+
+  return block([
+    cond(clockRunning(clock), 0, [
+      // If the clock isn't running we reset all the animation params and start the clock
+      set(state.finished, 0),
+      set(state.time, 0),
+      set(state.position, value),
+      set(state.frameTime, 0),
+      set(config.toValue, dest),
+      startClock(clock),
+    ]),
+    // we run the step here that is going to update position
+    timing(clock, state, config),
+    // if the animation is over we stop the clock
+    cond(state.finished, callback),
+    // we made the block return the updated position
+    state.position,
+  ]);
+}

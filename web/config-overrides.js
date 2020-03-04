@@ -8,7 +8,8 @@ const appIncludes = [
   resolveApp("./src"),
   resolveApp("../src"),
   resolveApp("../storybook"),
-  resolveApp("../../node_modules/react-native-reanimated"),
+  resolveApp("../node_modules/react-native-reanimated"),
+  resolveApp("../node_modules/react-native-gesture-handler"),
 ];
 
 module.exports = function override(config, env) {

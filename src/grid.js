@@ -1,8 +1,17 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { memo } from "react";
 import { G, Line } from "react-native-svg";
 
-const Horizontal = ({ ticks = [], y, svg }) => {
+/**
+ * @typedef {object} HorizontalLinesProps
+ * @property {import("react-native-svg").LineProps} svg
+ * @property {(number) => number} y
+ * @property {number[]} ticks
+ */
+
+/**
+ * @type {React.FC<HorizontalLinesProps>}
+ */
+const Horizontal = memo(({ ticks = [], y, svg }) => {
   return (
     <G>
       {ticks.map(tick => (
@@ -19,8 +28,18 @@ const Horizontal = ({ ticks = [], y, svg }) => {
       ))}
     </G>
   );
-};
+});
 
+/**
+ * @typedef {object} VerticalLinesProps
+ * @property {import("react-native-svg").LineProps} svg
+ * @property {(number) => number} x
+ * @property {number[]} ticksX
+ */
+
+/**
+ * @type {React.FC<VerticalLinesProps>}
+ */
 const Vertical = ({ ticksX = [], x, svg }) => {
   return (
     <G>
@@ -40,6 +59,9 @@ const Vertical = ({ ticksX = [], x, svg }) => {
   );
 };
 
+/**
+ * @type {React.FC<VerticalLinesProps & HorizontalLinesProps>}
+ */
 const Both = props => {
   return (
     <G>
@@ -49,51 +71,35 @@ const Both = props => {
   );
 };
 
-Vertical.propTypes = {
-  x: PropTypes.func,
-  dataPoints: PropTypes.array,
-  svg: PropTypes.object,
-};
-
-Horizontal.propTypes = {
-  y: PropTypes.func,
-  ticks: PropTypes.array,
-};
-
-Both.propTypes = {
-  ...Vertical.propTypes,
-  ...Horizontal.propTypes,
-};
-
 const Direction = {
   VERTICAL: "VERTICAL",
   HORIZONTAL: "HORIZONTAL",
   BOTH: "BOTH",
 };
 
-const Grid = ({ direction, ...props }) => {
-  if (direction === Direction.VERTICAL) {
-    return <Vertical {...props} />;
-  } else if (direction === Direction.HORIZONTAL) {
-    return <Horizontal {...props} />;
-  } else if (direction === Direction.BOTH) {
-    return <Both {...props} />;
-  }
+/**
+ * @typedef {object} GridProps
+ * @property {(keyof Direction)} [direction] default `HORIZONTAL`
+ * @property {boolean} [belowChart] default true
+ */
 
-  return null;
-};
+/**
+ * @type {React.FC<VerticalLinesProps & HorizontalLinesProps & GridProps>}
+ */
+const Grid = memo(
+  ({ direction = Direction.HORIZONTAL, belowChart = true, ...props }) => {
+    if (direction === Direction.VERTICAL) {
+      return <Vertical belowChart={belowChart} {...props} />;
+    } else if (direction === Direction.HORIZONTAL) {
+      return <Horizontal belowChart={belowChart} {...props} />;
+    } else if (direction === Direction.BOTH) {
+      return <Both belowChart={belowChart} {...props} />;
+    }
+
+    return null;
+  },
+);
 
 Grid.Direction = Direction;
-
-Grid.propTypes = {
-  direction: PropTypes.oneOf(Object.values(Direction)),
-  belowChart: PropTypes.bool,
-  svg: PropTypes.object,
-};
-
-Grid.defaultProps = {
-  direction: Direction.HORIZONTAL,
-  belowChart: true,
-};
 
 export default Grid;

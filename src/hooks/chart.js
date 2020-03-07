@@ -1,38 +1,25 @@
-import { useState } from "react";
 import * as array from "d3-array";
 import * as scale from "d3-scale";
 
-export const useChart = ({
+export function useChart({
+  width,
+  height,
   data,
-  xAccessor = ({ index }) => index,
-  yAccessor = ({ item }) => item,
-  yScale = scale.scaleLinear,
-  xScale = scale.scaleLinear,
-  numberOfTicks = 10,
-  contentInset: { top = 0, bottom = 0, left = 0, right = 0 } = {},
-  gridMax,
   gridMin,
-  clampX,
+  gridMax,
   clampY,
+  clampX,
   yMin,
   yMax,
   xMin,
   xMax,
-}) => {
-  const onLayout = event => {
-    const {
-      nativeEvent: {
-        layout: { height, width },
-      },
-    } = event;
-    setLayout({ height, width });
-  };
-
-  const [{ width, height }, setLayout] = useState({
-    width: 0,
-    height: 0,
-  });
-
+  contentInset: { top = 0, bottom = 0, left = 0, right = 0 } = {},
+  numberOfTicks = 10,
+  yScale = scale.scaleLinear,
+  xScale = scale.scaleLinear,
+  xAccessor = ({ index }) => index,
+  yAccessor = ({ item }) => item,
+}) {
   const mappedData = data.map((item, index) => ({
     y: yAccessor({ item, index }),
     x: xAccessor({ item, index }),
@@ -70,8 +57,5 @@ export const useChart = ({
     mappedData,
     ticks,
     ticksX,
-    width,
-    height,
-    onLayout,
   };
-};
+}

@@ -2,12 +2,16 @@ import React from "react";
 import { Grid, Path } from "../../../src";
 import * as shape from "d3-shape";
 import { Chart } from "../../../src/chart/newChart";
-import { useChart, useArea } from "../../../src/hooks";
+import { useChart, useArea, useLayout } from "../../../src/hooks";
 
 const AreaChartExample = () => {
   const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80];
 
-  const { x, y, width, height, ticks, onLayout, mappedData } = useChart({
+  const { width, height, onLayout } = useLayout();
+
+  const { x, y, ticks, mappedData } = useChart({
+    width,
+    height,
     data,
     contentInset: { top: 30, bottom: 30 },
   });

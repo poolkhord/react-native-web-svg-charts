@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ClipPath, Defs, LinearGradient, Rect, Stop } from "react-native-svg";
 import { Path, Grid } from "../../../src";
 import { Chart } from "../../../src/chart/newChart";
-import { useChart, useArea } from "../../../src/hooks";
+import { useChart, useArea, useLayout } from "../../../src/hooks";
 
 const PartialAreaChartExample = () => {
   const [data, setData] = useState(PATH1);
@@ -17,7 +17,12 @@ const PartialAreaChartExample = () => {
   }, []);
 
   const indexToClipFrom = 10;
-  const { x, y, width, height, ticks, onLayout, mappedData } = useChart({
+
+  const { width, height, onLayout } = useLayout();
+
+  const { x, y, ticks, mappedData } = useChart({
+    width,
+    height,
     data,
     contentInset: { top: 30, bottom: 30 },
   });

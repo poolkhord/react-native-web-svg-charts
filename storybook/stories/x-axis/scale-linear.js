@@ -1,6 +1,7 @@
 import React from "react";
 import { LineChart, XAxis, Grid } from "../../../src";
 import { View } from "react-native";
+import { Path } from "react-native-svg";
 
 class XAxisExample extends React.PureComponent {
   render() {
@@ -29,9 +30,13 @@ class XAxisExample extends React.PureComponent {
           data={data}
           gridMin={0}
           contentInset={{ top: 10, bottom: 10 }}
-          svg={{ stroke: "rgb(134, 65, 244)" }}
         >
-          <Grid />
+          {({ y, ticks, path }) => (
+            <>
+              <Path fill="none" stroke="rgb(134, 65, 244)" d={path} />
+              <Grid {...{ y, ticks }} />
+            </>
+          )}
         </LineChart>
         <XAxis
           style={{ marginHorizontal: -10 }}

@@ -1,5 +1,5 @@
 import React from "react";
-import { AreaChart, Grid } from "../../../src";
+import { AreaChart, Grid, Path } from "../../../src";
 import * as shape from "d3-shape";
 import { StyleSheet, View } from "react-native";
 
@@ -49,15 +49,25 @@ class LayeredChartsExample extends React.PureComponent {
           contentInset={{ top: 20, bottom: 20 }}
           curve={shape.curveNatural}
         >
-          <Grid />
+          {({ y, ticks, path }) => (
+            <>
+              <Path fill="rgba(134, 65, 244, 0.5)" d={path} />
+              <Grid {...{ y, ticks }} />
+            </>
+          )}
         </AreaChart>
         <AreaChart
           style={StyleSheet.absoluteFill}
           data={data2}
-          svg={{ fill: "rgba(34, 128, 176, 0.5)" }}
           contentInset={{ top: 20, bottom: 20 }}
           curve={shape.curveNatural}
-        />
+        >
+          {({ path }) => (
+            <>
+              <Path fill="rgba(34, 128, 176, 0.5)" d={path} />
+            </>
+          )}
+        </AreaChart>
       </View>
     );
   }

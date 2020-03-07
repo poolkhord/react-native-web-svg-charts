@@ -1,6 +1,7 @@
 import React from "react";
 import { LineChart, YAxis, Grid } from "../../../src";
 import { View } from "react-native";
+import { Path } from "react-native-svg";
 
 class YAxisExample extends React.PureComponent {
   render() {
@@ -42,7 +43,12 @@ class YAxisExample extends React.PureComponent {
           svg={{ stroke: "rgb(134, 65, 244)" }}
           contentInset={contentInset}
         >
-          <Grid />
+          {({ y, ticks, path }) => (
+            <>
+              <Path fill="none" stroke="rgb(134, 65, 244)" d={path} />
+              <Grid {...{ y, ticks }} />
+            </>
+          )}
         </LineChart>
       </View>
     );

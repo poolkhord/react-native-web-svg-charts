@@ -1,5 +1,5 @@
 import React from "react";
-import { AreaChart, XAxis, Grid } from "../../../src";
+import { AreaChart, XAxis, Grid, Path } from "../../../src";
 import { View } from "react-native";
 import * as scale from "d3-scale";
 import * as shape from "d3-shape";
@@ -43,10 +43,14 @@ class XAxisScaleTimeExample extends React.PureComponent {
           xAccessor={({ item }) => item.date}
           xScale={scale.scaleTime}
           contentInset={{ top: 10, bottom: 10 }}
-          svg={{ fill: "rgba(134, 65, 244, 0.5)" }}
           curve={shape.curveLinear}
         >
-          <Grid />
+          {({ y, ticks, path }) => (
+            <>
+              <Path fill="rgba(134, 65, 244, 0.5)" d={path} />
+              <Grid {...{ y, ticks }} />
+            </>
+          )}
         </AreaChart>
         <XAxis
           data={data}

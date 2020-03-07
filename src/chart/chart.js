@@ -101,7 +101,7 @@ class Chart extends PureComponent {
       <View style={style}>
         <View style={styles.container} onLayout={this._onLayout}>
           {height > 0 && width > 0 && (
-            <Svg style={{ height, width }}>{children(extraProps)}</Svg>
+            <Svg style={{ height, width }}>{children?.(extraProps)}</Svg>
           )}
         </View>
       </View>

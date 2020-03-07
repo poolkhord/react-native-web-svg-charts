@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { AreaChart, XAxis } from "../../../src";
+import { AreaChart, XAxis, Path } from "../../../src";
 import * as scale from "d3-scale";
 import * as dateFns from "date-fns";
 
@@ -40,14 +40,19 @@ class GridMinMaxExample extends React.PureComponent {
         <AreaChart
           style={{ flex: 1 }}
           data={data}
-          svg={{ fill: "rgba(134, 65, 244, 0.2)" }}
           // curve={shape.curveNatural}
           xMin={xMin}
           xScale={scale.scaleTime}
           xAccessor={({ item }) => item.date}
           yAccessor={({ item }) => item.value}
           yMax={200}
-        />
+        >
+          {({ path }) => (
+            <>
+              <Path fill="rgba(134, 65, 244, 0.2)" d={path} />
+            </>
+          )}
+        </AreaChart>
         <XAxis
           style={{ marginHorizontal: -10, marginTop: 10 }}
           contentInset={{ left: 10, right: 10 }}

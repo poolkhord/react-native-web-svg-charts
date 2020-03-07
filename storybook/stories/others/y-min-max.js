@@ -35,7 +35,12 @@ class GridMinMaxExample extends React.PureComponent {
         yMax={500}
         yMin={-500}
       >
-        <Line />
+        {({ path, line }) => (
+          <>
+            <Line line={line} />
+            <Path fill="rgba(134, 65, 244, 0.2)" d={path} />
+          </>
+        )}
       </AreaChart>
     );
   }

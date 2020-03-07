@@ -1,5 +1,5 @@
 import React from "react";
-import { AreaChart } from "../../../src";
+import { AreaChart, Path } from "../../../src";
 import { Defs, LinearGradient, Stop } from "react-native-svg";
 
 class GradientExample extends React.PureComponent {
@@ -52,7 +52,17 @@ class GradientExample extends React.PureComponent {
         contentInset={{ top: 20, bottom: 20 }}
         svg={{ fill: "url(#gradient)" }}
       >
-        <Gradient />
+        {({ path }) => (
+          <>
+            <Gradient />
+            <Path
+              fill="url(#gradient)"
+              d={path}
+              animate
+              animationDuration={300}
+            />
+          </>
+        )}
       </AreaChart>
     );
   }

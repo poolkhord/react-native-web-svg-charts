@@ -1,5 +1,5 @@
 import React from "react";
-import { AreaChart, Grid } from "../../../src";
+import { AreaChart, Grid, Path } from "../../../src";
 import * as shape from "d3-shape";
 import * as array from "d3-array";
 
@@ -30,10 +30,19 @@ class DifferentBaseExample extends React.PureComponent {
         data={data}
         contentInset={{ top: 30, bottom: 30 }}
         curve={shape.curveNatural}
-        svg={{ fill: "rgba(134, 65, 244, 0.8)" }}
         start={min}
       >
-        <Grid />
+        {({ y, ticks, path }) => (
+          <>
+            <Grid y={y} ticks={ticks} />
+            <Path
+              fill="rgba(134, 65, 244, 0.8)"
+              d={path}
+              animate
+              animationDuration={300}
+            />
+          </>
+        )}
       </AreaChart>
     );
   }

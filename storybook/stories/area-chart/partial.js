@@ -37,6 +37,7 @@ class PartialAreaChartExample extends React.PureComponent {
       }, 3000);
     }, 3000);
   }
+
   render() {
     const { data } = this.state;
 
@@ -47,16 +48,17 @@ class PartialAreaChartExample extends React.PureComponent {
         style={{ height: 200 }}
         data={data}
         contentInset={{ top: 30, bottom: 30 }}
-        svg={{
-          fill: "url(#gradient)",
-          clipPath: "url(#clip-path-1)",
-        }}
-        animationDuration={300}
-        animate
       >
-        {({ line, x, y, width, ticks }) => (
+        {({ line, x, y, width, ticks, path }) => (
           <>
             <Grid y={y} ticks={ticks} />
+            <Path
+              fill="url(#gradient)"
+              clipPath="url(#clip-path-1)"
+              d={path}
+              animate
+              animationDuration={300}
+            />
             <Gradient />
             <Clips x={x} width={width} indexToClipFrom={indexToClipFrom} />
             <Line line={line} />

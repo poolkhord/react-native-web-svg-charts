@@ -19,7 +19,7 @@ const DifferentBaseExample = () => {
     contentInset: { top: 30, bottom: 30 },
   });
 
-  const { path } = useArea({
+  const { area } = useArea({
     mappedData,
     x,
     y,
@@ -30,7 +30,7 @@ const DifferentBaseExample = () => {
   return (
     <Chart style={{ height: 200 }} {...{ width, height, onLayout }}>
       <Grid y={y} ticks={ticks} />
-      <Path fill="rgba(134, 65, 244, 0.8)" d={path} />
+      <Path fill="rgba(134, 65, 244, 0.8)" d={area} />
     </Chart>
   );
 };

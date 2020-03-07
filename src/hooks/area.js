@@ -7,7 +7,7 @@ export const useArea = ({
   curve = shape.curveLinear,
   start = 0,
 }) => {
-  const path = shape
+  const area = shape
     .area()
     .x(d => x(d.x))
     .y0(y(start))
@@ -15,15 +15,7 @@ export const useArea = ({
     .defined(item => typeof item.y === "number")
     .curve(curve)(mappedData);
 
-  const line = shape
-    .line()
-    .x(d => x(d.x))
-    .y(d => y(d.y))
-    .defined(item => typeof item.y === "number")
-    .curve(curve)(mappedData);
-
   return {
-    path,
-    line,
+    area,
   };
 };

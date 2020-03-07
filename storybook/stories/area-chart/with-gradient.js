@@ -17,7 +17,7 @@ const GradientExample = () => {
     contentInset: { top: 30, bottom: 20 },
   });
 
-  const { path } = useArea({
+  const { area } = useArea({
     mappedData,
     x,
     y,
@@ -27,7 +27,7 @@ const GradientExample = () => {
   return (
     <Chart style={{ height: 200 }} {...{ width, height, onLayout }}>
       <Gradient />
-      <Path fill="url(#gradient)" d={path} />
+      <Path fill="url(#gradient)" d={area} />
     </Chart>
   );
 };

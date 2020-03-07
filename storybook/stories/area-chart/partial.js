@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ClipPath, Defs, LinearGradient, Rect, Stop } from "react-native-svg";
 import { Path, Grid } from "../../../src";
 import { Chart } from "../../../src/chart/newChart";
-import { useChart, useArea, useLayout } from "../../../src/hooks";
+import { useChart, useArea, useLayout, useLine } from "../../../src/hooks";
 
 const PartialAreaChartExample = () => {
   const [data, setData] = useState(PATH1);
@@ -26,7 +26,9 @@ const PartialAreaChartExample = () => {
     data,
     contentInset: { top: 30, bottom: 30 },
   });
-  const { path, line } = useArea({ mappedData, x, y });
+
+  const { area } = useArea({ mappedData, x, y });
+  const { line } = useLine({ mappedData, x, y });
 
   return (
     <Chart style={{ height: 200 }} {...{ width, height, onLayout }}>
@@ -34,7 +36,7 @@ const PartialAreaChartExample = () => {
       <Path
         fill="url(#gradient)"
         clipPath="url(#clip-path-1)"
-        d={path}
+        d={area}
         animate
         animationDuration={300}
       />

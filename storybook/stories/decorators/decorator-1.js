@@ -1,6 +1,7 @@
 import React from "react";
 import { AreaChart, Grid } from "../../../src";
 import { Circle, Path } from "react-native-svg";
+import { StyleSheet } from "react-native";
 
 class DecoratorExample extends React.PureComponent {
   render() {
@@ -22,36 +23,51 @@ class DecoratorExample extends React.PureComponent {
       -80,
     ];
 
-    const Decorator = ({ x, y, data }) => {
-      return data.map((value, index) => (
-        <Circle
-          key={index}
-          cx={x(index)}
-          cy={y(value)}
-          r={4}
-          stroke={"rgb(134, 65, 244)"}
-          fill={"white"}
-        />
-      ));
-    };
-
-    const Line = ({ line }) => (
-      <Path d={line} stroke={"rgba(134, 65, 244)"} fill={"none"} />
-    );
-
     return (
       <AreaChart
-        style={{ height: 200 }}
+        style={styles.container}
         data={data}
-        svg={{ fill: "rgba(134, 65, 244, 0.2)" }}
         contentInset={{ top: 20, bottom: 30 }}
       >
-        <Grid />
-        <Line />
-        <Decorator />
+        {({ line, x, y, ticks, path }) => (
+          <>
+            <Path
+              fill="rgba(134, 65, 244, 0.2)"
+              d={path}
+              animate
+              animationDuration={300}
+            />
+            <Grid {...{ y, ticks }} />
+            <Line {...{ line }} />
+            <Decorator {...{ x, y, data }} />
+          </>
+        )}
       </AreaChart>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    height: 200,
+  },
+});
+
+const Decorator = ({ x, y, data }) => {
+  return data.map((value, index) => (
+    <Circle
+      key={index}
+      cx={x(index)}
+      cy={y(value)}
+      r={4}
+      stroke={"rgb(134, 65, 244)"}
+      fill={"white"}
+    />
+  ));
+};
+
+const Line = ({ line }) => (
+  <Path d={line} stroke={"rgba(134, 65, 244)"} fill={"none"} />
+);
 
 export default DecoratorExample;

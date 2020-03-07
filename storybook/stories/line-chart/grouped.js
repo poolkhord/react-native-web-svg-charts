@@ -1,5 +1,5 @@
 import React from "react";
-import { LineChart, Grid } from "../../../src";
+import { LineChart, Grid, Path } from "../../../src";
 
 class GroupedLineChartExample extends React.PureComponent {
   render() {
@@ -55,7 +55,17 @@ class GroupedLineChartExample extends React.PureComponent {
         data={data}
         contentInset={{ top: 20, bottom: 20 }}
       >
-        <Grid />
+        {({ y, ticks, path }) => (
+          <>
+            <Path
+              fill="rgba(134, 65, 244, 0.2)"
+              d={path}
+              animate
+              animationDuration={300}
+            />
+            <Grid {...{ y, ticks }} />
+          </>
+        )}
       </LineChart>
     );
   }

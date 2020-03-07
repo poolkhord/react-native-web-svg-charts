@@ -1,5 +1,5 @@
 import React from "react";
-import { LineChart, Grid } from "../../../src";
+import { LineChart, Grid, Path } from "../../../src";
 
 class LineChartExample extends React.PureComponent {
   render() {
@@ -25,10 +25,20 @@ class LineChartExample extends React.PureComponent {
       <LineChart
         style={{ height: 200 }}
         data={data}
-        svg={{ stroke: "rgb(134, 65, 244)" }}
         contentInset={{ top: 20, bottom: 20 }}
       >
-        <Grid />
+        {({ y, ticks, path }) => (
+          <>
+            <Grid y={y} ticks={ticks} />
+            <Path
+              fill="none"
+              stroke="rgb(134, 65, 244)"
+              d={path}
+              animate
+              animationDuration={300}
+            />
+          </>
+        )}
       </LineChart>
     );
   }

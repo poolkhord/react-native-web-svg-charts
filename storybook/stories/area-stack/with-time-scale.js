@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { StackedAreaChart, Grid, XAxis } from "../../../src";
+import { StackedAreaChart, Grid, XAxis, Path } from "../../../src";
 import * as shape from "d3-shape";
 import * as scale from "d3-scale";
 import * as dateFns from "date-fns";
@@ -52,7 +52,14 @@ class AreaStackChartExample extends React.PureComponent {
           xScale={scale.scaleTime}
           xAccessor={({ item }) => item.month}
         >
-          <Grid />
+          {({ areas, y, ticks }) => (
+            <>
+              <Grid {...{ y, ticks }} />
+              {areas.map((area, index) => (
+                <Path key={keys.key} fill={area.color} d={area.path} />
+              ))}
+            </>
+          )}
         </StackedAreaChart>
         <XAxis
           style={{ marginTop: 10, marginHorizontal: -10 }}

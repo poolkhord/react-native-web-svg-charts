@@ -1,5 +1,5 @@
 import React from "react";
-import { StackedAreaChart, Grid } from "../../../src";
+import { StackedAreaChart, Grid, Path } from "../../../src";
 import * as shape from "d3-shape";
 
 class AreaStackChartExample extends React.PureComponent {
@@ -51,9 +51,20 @@ class AreaStackChartExample extends React.PureComponent {
         keys={keys}
         colors={colors}
         curve={shape.curveNatural}
-        svgs={svgs}
       >
-        <Grid />
+        {({ areas, y, ticks }) => (
+          <>
+            <Grid {...{ y, ticks }} />
+            {areas.map((area, index) => (
+              <Path
+                key={keys.key}
+                fill={area.color}
+                {...svgs[index]}
+                d={area.path}
+              />
+            ))}
+          </>
+        )}
       </StackedAreaChart>
     );
   }

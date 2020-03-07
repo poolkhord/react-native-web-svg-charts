@@ -3,7 +3,7 @@ import * as array from "d3-array";
 import * as scale from "d3-scale";
 import * as shape from "d3-shape";
 import React, { PureComponent } from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { Svg } from "react-native-svg";
 import Path from "./animated-path";
 
@@ -29,14 +29,14 @@ class AreaStack extends PureComponent {
     width: 0,
   };
 
-  _onLayout(event) {
+  _onLayout = event => {
     const {
       nativeEvent: {
         layout: { height, width },
       },
     } = event;
     this.setState({ height, width });
-  }
+  };
 
   render() {
     const {
@@ -127,10 +127,11 @@ class AreaStack extends PureComponent {
 
     return (
       <View style={style}>
-        <View style={{ flex: 1 }} onLayout={event => this._onLayout(event)}>
+        <View style={styles.container} onLayout={this._onLayout}>
           {height > 0 && width > 0 && (
             <Svg style={{ height, width }}>
-              {React.Children.map(children, child => {
+              {children(extraProps)}
+              {/* {React.Children.map(children, child => {
                 if (child && child.props.belowChart) {
                   return React.cloneElement(child, extraProps);
                 }
@@ -151,7 +152,7 @@ class AreaStack extends PureComponent {
                   return React.cloneElement(child, extraProps);
                 }
                 return null;
-              })}
+              })} */}
             </Svg>
           )}
         </View>
@@ -160,9 +161,14 @@ class AreaStack extends PureComponent {
   }
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
+
 AreaStack.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  keys: PropTypes.arrayOf(PropTypes.string).isRequired,
   colors: PropTypes.arrayOf(PropTypes.string).isRequired,
   svgs: PropTypes.arrayOf(PropTypes.object),
   offset: PropTypes.func,

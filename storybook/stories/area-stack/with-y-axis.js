@@ -1,5 +1,5 @@
 import React from "react";
-import { StackedAreaChart, YAxis, Grid } from "../../../src";
+import { StackedAreaChart, YAxis, Grid, Path } from "../../../src";
 import * as shape from "d3-shape";
 import { View } from "react-native";
 
@@ -54,7 +54,14 @@ class AreaStackWithAxisExample extends React.PureComponent {
           colors={colors}
           curve={shape.curveNatural}
         >
-          <Grid />
+          {({ areas, y, ticks }) => (
+            <>
+              <Grid {...{ y, ticks }} />
+              {areas.map(area => (
+                <Path key={keys.key} fill={area.color} d={area.path} />
+              ))}
+            </>
+          )}
         </StackedAreaChart>
         <YAxis
           style={{ position: "absolute", top: 0, bottom: 0 }}

@@ -1,5 +1,5 @@
 import React from "react";
-import { StackedAreaChart, Grid } from "../../../src";
+import { StackedAreaChart, Grid, Path } from "../../../src";
 import { Defs, Stop, LinearGradient } from "react-native-svg";
 import * as shape from "d3-shape";
 
@@ -36,21 +36,6 @@ class AreaStackChartExample extends React.PureComponent {
       },
     ];
 
-    const Gradient = ({ index }) => (
-      <Defs key={index}>
-        <LinearGradient
-          id={"gradient"}
-          x1={"0%"}
-          y={"0%"}
-          x2={"100%"}
-          y2={"0%"}
-        >
-          <Stop offset={"0%"} stopColor={"rgb(134, 65, 244)"} />
-          <Stop offset={"100%"} stopColor={"#eeccff"} />
-        </LinearGradient>
-      </Defs>
-    );
-
     const colors = ["#8800cc", "#aa00ff", "#cc66ff", "#eeccff"];
     const keys = ["apples", "bananas", "cherries", "dates"];
     const svgs = [
@@ -67,13 +52,33 @@ class AreaStackChartExample extends React.PureComponent {
         keys={keys}
         colors={colors}
         curve={shape.curveNatural}
-        svgs={svgs}
       >
-        <Grid />
-        <Gradient />
+        {({ areas, y, ticks }) => (
+          <>
+            <Grid {...{ y, ticks }} />
+            <Gradient />
+            {areas.map((area, index) => (
+              <Path
+                key={keys.key}
+                fill={area.color}
+                {...svgs[index]}
+                d={area.path}
+              />
+            ))}
+          </>
+        )}
       </StackedAreaChart>
     );
   }
 }
+
+const Gradient = () => (
+  <Defs>
+    <LinearGradient id={"gradient"} x1={"0%"} y={"0%"} x2={"100%"} y2={"0%"}>
+      <Stop offset={"0%"} stopColor={"rgb(134, 65, 244)"} />
+      <Stop offset={"100%"} stopColor={"#eeccff"} />
+    </LinearGradient>
+  </Defs>
+);
 
 export default AreaStackChartExample;

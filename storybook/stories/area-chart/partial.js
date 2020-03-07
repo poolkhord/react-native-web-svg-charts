@@ -1,74 +1,45 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ClipPath, Defs, LinearGradient, Rect, Stop } from "react-native-svg";
-import { AreaChart, Path, Grid } from "../../../src";
+import { Path, Grid } from "../../../src";
+import { Chart } from "../../../src/chart/newChart";
+import { useChart, useArea } from "../../../src/hooks";
 
-class PartialAreaChartExample extends React.PureComponent {
-  state = {
-    data: [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80],
-  };
+const PartialAreaChartExample = () => {
+  const [data, setData] = useState(PATH1);
 
-  componentDidMount() {
+  useEffect(() => {
     setTimeout(() => {
-      this.setState({
-        data: [50, 10, 40, 95, 50, 24, 5, 9, 3, 5, -53, 24, 50, -20, -80],
-      });
+      setData(PATH2);
       setTimeout(() => {
-        this.setState({
-          data: [
-            24,
-            5,
-            9,
-            3,
-            5,
-            -53,
-            24,
-            50,
-            24,
-            35,
-            53,
-            -53,
-            24,
-            24,
-            50,
-            -20,
-            -80,
-          ],
-        });
+        setData(PATH3);
       }, 3000);
     }, 3000);
-  }
+  }, []);
 
-  render() {
-    const { data } = this.state;
+  const indexToClipFrom = 10;
+  const { x, y, width, height, ticks, onLayout, mappedData } = useChart({
+    data,
+    contentInset: { top: 30, bottom: 30 },
+  });
+  const { path, line } = useArea({ mappedData, x, y });
 
-    const indexToClipFrom = 10;
-
-    return (
-      <AreaChart
-        style={{ height: 200 }}
-        data={data}
-        contentInset={{ top: 30, bottom: 30 }}
-      >
-        {({ line, x, y, width, ticks, path }) => (
-          <>
-            <Grid y={y} ticks={ticks} />
-            <Path
-              fill="url(#gradient)"
-              clipPath="url(#clip-path-1)"
-              d={path}
-              animate
-              animationDuration={300}
-            />
-            <Gradient />
-            <Clips x={x} width={width} indexToClipFrom={indexToClipFrom} />
-            <Line line={line} />
-            <DashedLine line={line} />
-          </>
-        )}
-      </AreaChart>
-    );
-  }
-}
+  return (
+    <Chart style={{ height: 200 }} {...{ width, height, onLayout }}>
+      <Grid y={y} ticks={ticks} />
+      <Path
+        fill="url(#gradient)"
+        clipPath="url(#clip-path-1)"
+        d={path}
+        animate
+        animationDuration={300}
+      />
+      <Gradient />
+      <Clips x={x} width={width} indexToClipFrom={indexToClipFrom} />
+      <Line line={line} />
+      <DashedLine line={line} />
+    </Chart>
+  );
+};
 
 const Gradient = () => (
   <Defs key={"defs"}>
@@ -122,4 +93,25 @@ const DashedLine = ({ line }) => (
   />
 );
 
+const PATH1 = [
+  24,
+  5,
+  9,
+  3,
+  5,
+  -53,
+  24,
+  50,
+  24,
+  35,
+  53,
+  -53,
+  24,
+  24,
+  50,
+  -20,
+  -80,
+];
+const PATH2 = [50, 10, 40, 95, 50, 24, 5, 9, 3, 5, -53, 24, 50, -20, -80];
+const PATH3 = [24, 5, 9, 3, -53, 24, 50, 24, 35, 53, -53, 24, 24, 50, -20, -80];
 export default PartialAreaChartExample;

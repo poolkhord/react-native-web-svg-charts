@@ -1,70 +1,40 @@
 import React from "react";
-import { AreaChart, Path } from "../../../src";
+import { Path } from "../../../src";
 import { Defs, LinearGradient, Stop } from "react-native-svg";
+import { useChart, useArea } from "../../../src/hooks";
+import * as shape from "d3-shape";
+import { Chart } from "../../../src/chart/newChart";
 
-class GradientExample extends React.PureComponent {
-  render() {
-    const data = [
-      50,
-      10,
-      40,
-      95,
-      -4,
-      -24,
-      85,
-      91,
-      35,
-      53,
-      -53,
-      24,
-      50,
-      -20,
-      -80,
-    ];
+const GradientExample = () => {
+  const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80];
 
-    const Gradient = ({ index }) => (
-      <Defs key={index}>
-        <LinearGradient
-          id={"gradient"}
-          x1={"0%"}
-          y={"0%"}
-          x2={"0%"}
-          y2={"100%"}
-        >
-          <Stop
-            offset={"0%"}
-            stopColor={"rgb(134, 65, 244)"}
-            stopOpacity={0.8}
-          />
-          <Stop
-            offset={"100%"}
-            stopColor={"rgb(134, 65, 244)"}
-            stopOpacity={0.2}
-          />
-        </LinearGradient>
-      </Defs>
-    );
+  const { x, y, width, height, onLayout, mappedData } = useChart({
+    data,
+    contentInset: { top: 30, bottom: 20 },
+  });
 
-    return (
-      <AreaChart
-        style={{ height: 200 }}
-        data={data}
-        contentInset={{ top: 20, bottom: 20 }}
-      >
-        {({ path }) => (
-          <>
-            <Gradient />
-            <Path
-              fill="url(#gradient)"
-              d={path}
-              animate
-              animationDuration={300}
-            />
-          </>
-        )}
-      </AreaChart>
-    );
-  }
-}
+  const { path } = useArea({
+    mappedData,
+    x,
+    y,
+    curve: shape.curveNatural,
+  });
+
+  return (
+    <Chart style={{ height: 200 }} {...{ width, height, onLayout }}>
+      <Gradient />
+      <Path fill="url(#gradient)" d={path} />
+    </Chart>
+  );
+};
+
+const Gradient = () => (
+  <Defs>
+    <LinearGradient id={"gradient"} x1={"0%"} y={"0%"} x2={"0%"} y2={"100%"}>
+      <Stop offset={"0%"} stopColor={"rgb(134, 65, 244)"} stopOpacity={0.8} />
+      <Stop offset={"100%"} stopColor={"rgb(134, 65, 244)"} stopOpacity={0.2} />
+    </LinearGradient>
+  </Defs>
+);
 
 export default GradientExample;

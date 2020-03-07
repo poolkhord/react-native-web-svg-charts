@@ -3,9 +3,8 @@ import * as scale from "d3-scale";
 import * as shape from "d3-shape";
 import PropTypes from "prop-types";
 import React, { PureComponent } from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import Svg from "react-native-svg";
-import Path from "../animated-path";
 
 class Chart extends PureComponent {
   state = {
@@ -13,14 +12,14 @@ class Chart extends PureComponent {
     height: 0,
   };
 
-  _onLayout(event) {
+  _onLayout = event => {
     const {
       nativeEvent: {
         layout: { height, width },
       },
     } = event;
     this.setState({ height, width });
-  }
+  };
 
   createPaths() {
     throw 'Extending "Chart" requires you to override "createPaths';
@@ -34,15 +33,12 @@ class Chart extends PureComponent {
       yScale,
       xScale,
       style,
-      animate,
-      animationDuration,
       numberOfTicks,
       contentInset: { top = 0, bottom = 0, left = 0, right = 0 },
       gridMax,
       gridMin,
       clampX,
       clampY,
-      svg,
       children,
     } = this.props;
 
@@ -103,35 +99,20 @@ class Chart extends PureComponent {
 
     return (
       <View style={style}>
-        <View style={{ flex: 1 }} onLayout={event => this._onLayout(event)}>
+        <View style={styles.container} onLayout={this._onLayout}>
           {height > 0 && width > 0 && (
-            <Svg style={{ height, width }}>
-              {React.Children.map(children, child => {
-                if (child && child.props.belowChart) {
-                  return React.cloneElement(child, extraProps);
-                }
-                return null;
-              })}
-              <Path
-                fill={"none"}
-                {...svg}
-                d={paths.path}
-                animate={animate}
-                animationDuration={animationDuration}
-              />
-              {React.Children.map(children, child => {
-                if (child && !child.props.belowChart) {
-                  return React.cloneElement(child, extraProps);
-                }
-                return null;
-              })}
-            </Svg>
+            <Svg style={{ height, width }}>{children(extraProps)}</Svg>
           )}
         </View>
       </View>
     );
   }
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
 Chart.propTypes = {
   data: PropTypes.oneOfType([

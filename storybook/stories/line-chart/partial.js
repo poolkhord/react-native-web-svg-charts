@@ -1,54 +1,42 @@
 import React from "react";
 import { ClipPath, Defs, Rect } from "react-native-svg";
-import { LineChart, Path } from "../../../src";
+import { Path, useLayout, useChart, Chart, useLine } from "../../../src";
 import { StyleSheet } from "react-native";
 
-class PartialLineChartExample extends React.PureComponent {
-  render() {
-    const data = [
-      50,
-      10,
-      40,
-      95,
-      -4,
-      -24,
-      85,
-      91,
-      35,
-      53,
-      -53,
-      24,
-      50,
-      -20,
-      -80,
-    ];
+const PartialLineChartExample = () => {
+  const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80];
 
-    const indexToClipFrom = 10;
+  const indexToClipFrom = 10;
 
-    return (
-      <LineChart
-        style={styles.container}
-        data={data}
-        contentInset={{ top: 20, bottom: 20 }}
-      >
-        {({ line, x, width, path }) => (
-          <>
-            <Clips x={x} width={width} indexToClipFrom={indexToClipFrom} />
-            <Path
-              fill="none"
-              stroke="rgb(134, 65, 244)"
-              strokeWidth={2}
-              clipPath="url(#clip-path-1)"
-              d={path}
-            />
-            <Shadow {...{ line }} />
-            <DashedLine line={line} />
-          </>
-        )}
-      </LineChart>
-    );
-  }
-}
+  const { width, height, onLayout } = useLayout();
+
+  const { x, y, mappedData } = useChart({
+    width,
+    height,
+    data,
+    contentInset: { top: 20, bottom: 20 },
+  });
+  const { line } = useLine({
+    mappedData,
+    x,
+    y,
+  });
+
+  return (
+    <Chart style={styles.container} {...{ width, height, onLayout }}>
+      <Clips x={x} width={width} indexToClipFrom={indexToClipFrom} />
+      <Path
+        fill="none"
+        stroke="rgb(134, 65, 244)"
+        strokeWidth={2}
+        clipPath="url(#clip-path-1)"
+        d={line}
+      />
+      <Shadow {...{ line }} />
+      <DashedLine line={line} />
+    </Chart>
+  );
+};
 const styles = StyleSheet.create({
   container: {
     height: 200,

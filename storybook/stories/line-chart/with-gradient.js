@@ -1,50 +1,38 @@
 import React from "react";
 import { Defs, LinearGradient, Stop } from "react-native-svg";
-import { LineChart, Path } from "../../../src";
+import { Path, Chart, useArea, useChart, useLayout, useLine } from "../../../src";
 
-class GradientLineExample extends React.PureComponent {
-  render() {
-    const data = [
-      50,
-      10,
-      40,
-      95,
-      -4,
-      -24,
-      85,
-      91,
-      35,
-      53,
-      -53,
-      24,
-      50,
-      -20,
-      -80,
-    ];
+const GradientLineExample = () => {
+  const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80];
 
-    return (
-      <LineChart
-        style={{ height: 200 }}
-        data={data}
-        contentInset={{ top: 20, bottom: 20 }}
-      >
-        {({ path }) => (
-          <>
-            <Gradient />
-            <Path
-              fill="none"
-              strokeWidth={2}
-              stroke="url(#gradient)"
-              d={path}
-              animate
-              animationDuration={300}
-            />
-          </>
-        )}
-      </LineChart>
-    );
-  }
-}
+  const { width, height, onLayout } = useLayout();
+
+  const { x, y, mappedData } = useChart({
+    width,
+    height,
+    data,
+    contentInset: { top: 20, bottom: 20 },
+  });
+  const { line } = useLine({
+    mappedData,
+    x,
+    y,
+  });
+
+  return (
+    <Chart style={{ height: 200 }} {...{ width, height, onLayout }}>
+      <Gradient />
+      <Path
+        fill="none"
+        strokeWidth={2}
+        stroke="url(#gradient)"
+        d={line}
+        animate
+        animationDuration={300}
+      />
+    </Chart>
+  );
+};
 
 const Gradient = () => (
   <Defs key={"gradient"}>

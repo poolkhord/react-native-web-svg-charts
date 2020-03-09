@@ -1,8 +1,5 @@
-import AreaChart from "./area-chart";
-import StackedAreaChart from "./stacked-area-chart";
 import BarChart from "./bar-chart";
 import StackedBarChart from "./stacked-bar-chart";
-import LineChart from "./line-chart";
 import PieChart from "./pie-chart";
 import ProgressCircle from "./progress-circle";
 import XAxis from "./x-axis";
@@ -11,7 +8,14 @@ import Decorators from "./chart-decorators";
 import Grid from "./grid";
 import Path from "./animated-path";
 
-import { useArea, useChart, useLayout, useLine, useStackArea } from "./hooks";
+import {
+  useArea,
+  useChart,
+  useLayout,
+  useLine,
+  useStackArea,
+  stackAreaExtractDataPoints,
+} from "./hooks";
 import { Chart } from "./chart/newChart";
 
 export {
@@ -20,11 +24,9 @@ export {
   useLayout,
   useLine,
   useStackArea,
+  stackAreaExtractDataPoints,
   Chart,
-  LineChart,
   PieChart,
-  AreaChart,
-  StackedAreaChart,
   StackedBarChart,
   BarChart,
   XAxis,

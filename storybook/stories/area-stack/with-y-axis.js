@@ -1,5 +1,5 @@
 import React from "react";
-import { StackedAreaChart, YAxis, Grid, Path } from "../../../src";
+import { stackAreaExtractDataPoints, YAxis, Grid, Path } from "../../../src";
 import * as shape from "d3-shape";
 import { View } from "react-native";
 import { Chart } from "../../../src/chart/newChart";
@@ -67,7 +67,7 @@ const AreaStackWithAxisExample = () => {
       </Chart>
       <YAxis
         style={{ position: "absolute", top: 0, bottom: 0 }}
-        data={StackedAreaChart.extractDataPoints(data, keys)}
+        data={stackAreaExtractDataPoints(data, keys)}
         contentInset={{ top: 10, bottom: 10 }}
         svg={{
           fontSize: 8,

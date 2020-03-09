@@ -1,12 +1,12 @@
 import * as shape from "d3-shape";
 
-export const useArea = ({
+export function useArea({
   mappedData,
   x,
   y,
   curve = shape.curveLinear,
   start = 0,
-}) => {
+}) {
   const area = shape
     .area()
     .x(d => x(d.x))
@@ -18,4 +18,4 @@ export const useArea = ({
   return {
     area,
   };
-};
+}

@@ -11,7 +11,16 @@ import Decorators from "./chart-decorators";
 import Grid from "./grid";
 import Path from "./animated-path";
 
+import { useArea, useChart, useLayout, useLine, useStackArea } from "./hooks";
+import { Chart } from "./chart/newChart";
+
 export {
+  useArea,
+  useChart,
+  useLayout,
+  useLine,
+  useStackArea,
+  Chart,
   LineChart,
   PieChart,
   AreaChart,

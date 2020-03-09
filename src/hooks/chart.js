@@ -13,6 +13,7 @@ export function useChart({
   yMax,
   xMin,
   xMax,
+  isMultiple = false,
   contentInset: { top = 0, bottom = 0, left = 0, right = 0 } = {},
   numberOfTicks = 10,
   yScale = scale.scaleLinear,
@@ -23,7 +24,7 @@ export function useChart({
   let mappedData;
   let yValues;
   let xValues;
-  if (typeof data[0] === "object") {
+  if (isMultiple) {
     mappedData = data.map(dataArray =>
       dataArray.data.map((item, index) => ({
         y: yAccessor({ item, index }),

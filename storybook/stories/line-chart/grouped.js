@@ -54,6 +54,7 @@ const GroupedLineChartExample = () => {
     width,
     height,
     data,
+    isMultiple: true,
     contentInset: { top: 20, bottom: 20 },
   });
   const { lines } = useLine({

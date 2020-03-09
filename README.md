@@ -34,13 +34,7 @@ Other than the above dependency this library uses pure javascript and supports b
 Then you can install the library using either yarn:
 
 ```
-yarn add react-native-web-svg-charts
-```
-
-or npm:
-
-```
-npm install --save react-native-web-svg-charts
+yarn add react-native-web-svg-charts react-native-svg react-native-reanimated
 ```
 
 Now you're good to go!
@@ -117,42 +111,41 @@ Also see
 
 ```jsx
 import React from "react";
-import { AreaChart, Grid } from "react-native-web-svg-charts";
 import * as shape from "d3-shape";
+import {
+  Chart,
+  Grid,
+  Path,
+  useChart,
+  useArea,
+  useLayout,
+} from "react-native-web-svg-charts";
 
-class AreaChartExample extends React.PureComponent {
-  render() {
-    const data = [
-      50,
-      10,
-      40,
-      95,
-      -4,
-      -24,
-      85,
-      91,
-      35,
-      53,
-      -53,
-      24,
-      50,
-      -20,
-      -80,
-    ];
+const AreaChartExample = () => {
+  const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80];
 
-    return (
-      <AreaChart
-        style={{ height: 200 }}
-        data={data}
-        contentInset={{ top: 30, bottom: 30 }}
-        curve={shape.curveNatural}
-        svg={{ fill: "rgba(134, 65, 244, 0.8)" }}
-      >
-        <Grid />
-      </AreaChart>
-    );
-  }
-}
+  const { width, height, onLayout } = useLayout();
+
+  const { x, y, ticks, mappedData } = useChart({
+    width,
+    height,
+    data,
+    contentInset: { top: 30, bottom: 30 },
+  });
+  const { area } = useArea({
+    mappedData,
+    x,
+    y,
+    curve: shape.curveNatural,
+  });
+
+  return (
+    <Chart style={{ height: 200 }} {...{ width, height, onLayout }}>
+      <Grid y={y} ticks={ticks} />
+      <Path fill="rgba(134, 65, 244, 0.8)" d={area} />
+    </Chart>
+  );
+};
 ```
 
 #### Props
@@ -180,64 +173,79 @@ Use the `svgs` prop to pass in `react-native-svg` compliant props to each area.
 
 ```jsx
 import React from "react";
-import { StackedAreaChart } from "react-native-web-svg-charts";
 import * as shape from "d3-shape";
+import {
+  Chart,
+  Grid,
+  Path,
+  useStackArea,
+  useLayout,
+} from "react-native-web-svg-charts";
 
-class StackedAreaExample extends React.PureComponent {
-  render() {
-    const data = [
-      {
-        month: new Date(2015, 0, 1),
-        apples: 3840,
-        bananas: 1920,
-        cherries: 960,
-        dates: 400,
-      },
-      {
-        month: new Date(2015, 1, 1),
-        apples: 1600,
-        bananas: 1440,
-        cherries: 960,
-        dates: 400,
-      },
-      {
-        month: new Date(2015, 2, 1),
-        apples: 640,
-        bananas: 960,
-        cherries: 3640,
-        dates: 400,
-      },
-      {
-        month: new Date(2015, 3, 1),
-        apples: 3320,
-        bananas: 480,
-        cherries: 640,
-        dates: 400,
-      },
-    ];
+const AreaStackChartExample = () => {
+  const data = [
+    {
+      month: new Date(2015, 0, 1),
+      apples: 3840,
+      bananas: 1920,
+      cherries: 960,
+      dates: 400,
+    },
+    {
+      month: new Date(2015, 1, 1),
+      apples: 1600,
+      bananas: 1440,
+      cherries: 960,
+      dates: 400,
+    },
+    {
+      month: new Date(2015, 2, 1),
+      apples: 640,
+      bananas: 960,
+      cherries: 3640,
+      dates: 400,
+    },
+    {
+      month: new Date(2015, 3, 1),
+      apples: 3320,
+      bananas: 480,
+      cherries: 640,
+      dates: 400,
+    },
+  ];
 
-    const colors = ["#8800cc", "#aa00ff", "#cc66ff", "#eeccff"];
-    const keys = ["apples", "bananas", "cherries", "dates"];
-    const svgs = [
-      { onPress: () => console.log("apples") },
-      { onPress: () => console.log("bananas") },
-      { onPress: () => console.log("cherries") },
-      { onPress: () => console.log("dates") },
-    ];
+  const colors = ["#8800cc", "#aa00ff", "#cc66ff", "#eeccff"];
+  const keys = ["apples", "bananas", "cherries", "dates"];
+  const svgs = [
+    { onPress: () => console.log("apples") },
+    { onPress: () => console.log("bananas") },
+    { onPress: () => console.log("cherries") },
+    { onPress: () => console.log("dates") },
+  ];
 
-    return (
-      <StackedAreaChart
-        style={{ height: 200, paddingVertical: 16 }}
-        data={data}
-        keys={keys}
-        colors={colors}
-        curve={shape.curveNatural}
-        showGrid={false}
-        svgs={svgs}
-      />
-    );
-  }
-}
+  const { width, height, onLayout } = useLayout();
+
+  const { areas, ticks, y } = useStackArea({
+    width,
+    height,
+    data,
+    keys,
+    colors,
+    curve: shape.curveNatural,
+  });
+
+  return (
+    <Chart
+      style={{ height: 200, paddingVertical: 16 }}
+      {...{ width, height, onLayout }}
+    >
+      <Grid {...{ y, ticks }} />
+      {areas.map(({ path, key, color }, index) => (
+        <Path key={key} fill={color} {...svgs[index]} d={path} />
+      ))}
+    </Chart>
+  );
+};
 ```
 
 #### Props

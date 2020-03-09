@@ -1,47 +1,33 @@
 import React from "react";
-import { LineChart, Path } from "../../../src";
-import { View, StyleSheet } from "react-native";
+import { Path, Chart, useLine, useChart, useLayout } from "../../../src";
+import { StyleSheet } from "react-native";
 import { G, Line } from "react-native-svg";
 
-class CustomGridExample extends React.PureComponent {
-  render() {
-    const data = [
-      50,
-      10,
-      40,
-      95,
-      -4,
-      -24,
-      85,
-      91,
-      35,
-      53,
-      -53,
-      24,
-      50,
-      -20,
-      -80,
-    ];
+const CustomGridExample = () => {
+  const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80];
 
-    return (
-      <View style={styles.container}>
-        <LineChart style={styles.chart} data={data}>
-          {({ x, y, ticks, path }) => (
-            <>
-              <CustomGrid {...{ x, y, data, ticks }} />
-              <Path
-                fill="none"
-                stroke="rgb(134, 65, 244)"
-                strokeWidth={5}
-                d={path}
-              />
-            </>
-          )}
-        </LineChart>
-      </View>
-    );
-  }
-}
+  const { width, height, onLayout } = useLayout();
+
+  const { x, y, ticks, mappedData } = useChart({
+    width,
+    height,
+    data,
+    contentInset: { top: 20, bottom: 20 },
+  });
+
+  const { line } = useLine({
+    mappedData,
+    x,
+    y,
+  });
+
+  return (
+    <Chart style={styles.container} {...{ width, height, onLayout }}>
+      <CustomGrid {...{ x, y, data, ticks }} />
+      <Path fill="none" stroke="rgb(134, 65, 244)" strokeWidth={5} d={line} />
+    </Chart>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

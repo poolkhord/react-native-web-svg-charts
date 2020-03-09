@@ -1,59 +1,40 @@
 import React from "react";
-import { LineChart, Grid, Path } from "../../../src";
-import * as shape from "d3-shape";
+import { Grid, Path, useLayout, useChart, useLine, Chart } from "../../../src";
 import { Circle, G, Line, Rect, Text } from "react-native-svg";
 
-class ExtrasExample extends React.PureComponent {
-  render() {
-    const data = [
-      50,
-      10,
-      40,
-      95,
-      -4,
-      -24,
-      85,
-      91,
-      35,
-      53,
-      -53,
-      24,
-      50,
-      -20,
-      -80,
-    ];
+const ExtrasExample = () => {
+  const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80];
 
-    /**
-     * Both below functions should preferably be their own React Components
-     */
+  const { width, height, onLayout } = useLayout();
 
-    return (
-      <LineChart
-        style={{ height: 200 }}
-        data={data}
-        svg={{}}
-        contentInset={{ top: 20, bottom: 20 }}
-        curve={shape.curveLinear}
-      >
-        {({ x, y, ticks, path }) => (
-          <>
-            <Path
-              fill="none"
-              stroke="rgb(134, 65, 244)"
-              strokeWidth={2}
-              d={path}
-              animate
-              animationDuration={300}
-            />
-            <Grid {...{ y, ticks }} />
-            <HorizontalLine {...{ y }} />
-            <Tooltip {...{ x, y, data }} />
-          </>
-        )}
-      </LineChart>
-    );
-  }
-}
+  const { x, y, ticks, mappedData } = useChart({
+    width,
+    height,
+    data,
+    contentInset: { top: 20, bottom: 20 },
+  });
+  const { line } = useLine({
+    mappedData,
+    x,
+    y,
+  });
+
+  return (
+    <Chart style={{ height: 200 }} {...{ width, height, onLayout }}>
+      <Path
+        fill="none"
+        stroke="rgb(134, 65, 244)"
+        strokeWidth={2}
+        d={line}
+        animate
+        animationDuration={300}
+      />
+      <Grid {...{ y, ticks }} />
+      <HorizontalLine {...{ y }} />
+      <Tooltip {...{ x, y, data }} />
+    </Chart>
+  );
+};
 
 const HorizontalLine = ({ y }) => (
   <Line

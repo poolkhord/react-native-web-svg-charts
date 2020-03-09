@@ -20,13 +20,27 @@ export function useChart({
   xAccessor = ({ index }) => index,
   yAccessor = ({ item }) => item,
 }) {
-  const mappedData = data.map((item, index) => ({
-    y: yAccessor({ item, index }),
-    x: xAccessor({ item, index }),
-  }));
+  let mappedData;
+  let yValues;
+  let xValues;
+  if (typeof data[0] === "object") {
+    mappedData = data.map(dataArray =>
+      dataArray.data.map((item, index) => ({
+        y: yAccessor({ item, index }),
+        x: xAccessor({ item, index }),
+      })),
+    );
+    yValues = array.merge(mappedData).map(item => item.y);
+    xValues = array.merge(mappedData).map(item => item.x);
+  } else {
+    mappedData = data.map((item, index) => ({
+      y: yAccessor({ item, index }),
+      x: xAccessor({ item, index }),
+    }));
 
-  const yValues = mappedData.map(item => item.y);
-  const xValues = mappedData.map(item => item.x);
+    yValues = mappedData.map(item => item.y);
+    xValues = mappedData.map(item => item.x);
+  }
 
   const yExtent = array.extent([...yValues, gridMin, gridMax]);
   const xExtent = array.extent([...xValues]);

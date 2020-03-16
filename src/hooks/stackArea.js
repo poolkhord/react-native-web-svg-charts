@@ -11,7 +11,6 @@ export function useStackArea({
   gridMax,
   clampY,
   clampX,
-  colors,
   yMin,
   yMax,
   xMin,
@@ -57,17 +56,25 @@ export function useStackArea({
   const ticks = y.ticks(numberOfTicks);
 
   const areas = series.map((serie, index) => {
+    const mappedData = data.map((_, i) => serie[i]);
     const path = shape
       .area()
-      .x((d, index) => x(xAccessor({ item: d.data, index })))
+      .x((d, i) => x(xAccessor({ item: d.data, index: i })))
       .y0(d => y(d[0]))
       .y1(d => y(d[1]))
-      .curve(curve)(data.map((_, index) => serie[index]));
+      .curve(curve)(mappedData);
+
+    const line = shape
+      .line()
+      .x((d, i) => x(xAccessor({ item: d.data, index: i })))
+      .y(d => y(d[0]))
+      .y(d => y(d[1]))
+      .curve(curve)(mappedData);
 
     return {
       path,
+      line,
       key: keys[index],
-      color: colors[index],
     };
   });
 

@@ -53,7 +53,6 @@ const AreaStackChartExample = () => {
     height,
     data,
     keys,
-    colors,
     curve: shape.curveNatural,
   });
 
@@ -65,7 +64,12 @@ const AreaStackChartExample = () => {
       <Grid {...{ y, ticks }} />
       <Gradient />
       {areas.map((area, index) => (
-        <Path key={keys.key} fill={area.color} {...svgs[index]} d={area.path} />
+        <Path
+          key={keys.key}
+          fill={colors[index]}
+          {...svgs[index]}
+          d={area.path}
+        />
       ))}
     </Chart>
   );

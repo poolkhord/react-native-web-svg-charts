@@ -52,7 +52,6 @@ const AreaStackWithAxisExample = () => {
     height,
     data,
     keys,
-    colors,
     contentInset: { top: 10, bottom: 10 },
     curve: shape.curveNatural,
   });
@@ -62,7 +61,7 @@ const AreaStackWithAxisExample = () => {
       <Chart style={{ flex: 1 }} {...{ width, height, onLayout }}>
         <Grid {...{ y, ticks }} />
         {areas.map((area, index) => (
-          <Path key={keys.key} fill={area.color} d={area.path} />
+          <Path key={keys.key} fill={colors[index]} d={area.path} />
         ))}
       </Chart>
       <YAxis

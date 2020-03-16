@@ -49,7 +49,6 @@ const AreaStackChartExample = () => {
     height,
     data,
     keys,
-    colors,
     curve: shape.curveNatural,
     xScale: scale.scaleTime,
     xAccessor: ({ item }) => item.month,
@@ -60,7 +59,7 @@ const AreaStackChartExample = () => {
       <Chart style={{ flex: 1 }} {...{ width, height, onLayout }}>
         <Grid {...{ y, ticks }} />
         {areas.map((area, index) => (
-          <Path key={keys.key} fill={area.color} d={area.path} />
+          <Path key={keys.key} fill={colors[index]} d={area.path} />
         ))}
       </Chart>
       <XAxis

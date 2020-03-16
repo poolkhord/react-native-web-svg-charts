@@ -2,6 +2,38 @@ import * as shape from "d3-shape";
 import * as array from "d3-array";
 import * as scale from "d3-scale";
 
+/**
+ * @typedef {object} Options
+ * @property {number} width
+ * @property {number} height
+ * @property {{}[] | number[] | [][]} data
+ * @property {string[]} keys
+ * @property {number} [gridMin]
+ * @property {number} [gridMax]
+ * @property {boolean} [clampY]
+ * @property {boolean} [clampX]
+ * @property {number} [yMin]
+ * @property {number} [yMax]
+ * @property {number} [xMin]
+ * @property {number} [xMax]
+ * @property {(context: any) => any} [curve=shape.curveLinear]
+ * @property {shape.stackOffsetNone} [offset=shape.stackOffsetNone]
+ * @property {shape.stackOrderNone} [order=shape.stackOrderNone]
+ * @property {{ top: number, bottom: number, left: number, right: number }} [contentInset]
+ * @property {number} [numberOfTicks]
+ * @property {scale.scaleLinear} [xScale]
+ * @property {() => any} [xAccessor]
+ */
+
+/**
+ * @param {Options} options
+  @returns {{ 
+    x: () => number,
+    y: () => number,
+    ticks: number[],
+    areas: {path: string, line: string, key: string}[]
+  }}
+ */
 export function useStackArea({
   width,
   height,

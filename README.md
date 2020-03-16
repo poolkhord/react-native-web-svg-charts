@@ -6,26 +6,34 @@
 
 Welcome to react-native-web-svg-charts!
 
-### Looking for maintainers! I alone don't have the time to maintain this library anymore. Preferably looking for somebody who uses this library in their professional work (how I originally got the time to maintain).
-
-### version 5 is now available!
-
 A much improved decorator system has been introduced, allowing for greater flexibility and less complexity.
 See [releases](https://github.com/poolkhord/react-native-web-svg-charts/releases) for more information.
 
 ---
 
+### Examples
+
 In order to not bloat this README to much we've moved some examples over to
-[`react-native-web-svg-charts-examples`](https://github.com/poolkhord/react-native-web-svg-charts-examples).
+['Examples'](https://github.com/poolkhord/react-native-web-svg-charts/tree/master/storybook/stories).
 There we will try to showcase the really cool things you can do with this library.
 This README will try to keep things as simple as possible so that everybody can get up and running as fast as possible.
+
+To run examples
+
+```$
+cd web
+yarn
+yarn start
+```
 
 ## Prerequisites
 
 This library uses [react-native-svg](https://github.com/react-native-community/react-native-svg)
 to render its graphs. Therefore this library needs to be installed **AND** linked into your project to work.
 
-Other than the above dependency this library uses pure javascript and supports both iOS and Android
+react-native-reanimated for support animated path.
+
+Other than the above dependencies this library uses pure javascript and supports iOS and Android and Web
 
 ## Getting Started
 
@@ -50,7 +58,7 @@ We're very proud of our "decorator" support. All charts can be extended with "de
 Simply pass in a `react-native-svg` compliant component as a child to the graph and it will be called with all the necessary information to layout your decorator.
 See each chart for information on what data the decorator will be called with.
 
-## Common Props
+## Common params
 
 | Property          | Default                                  | Description                                                                                                                                                                                                                                                    |
 | ----------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -59,10 +67,8 @@ See each chart for information on what data the decorator will be called with.
 | xAccessor         | ({ index }) => index                     | Same as `yAccessor` but returns the x-value of that entry                                                                                                                                                                                                      |
 | yScale            | d3Scale.scaleLinear                      | A function that determines the scale of said axis (only tested with scaleLinear, scaleTime & scaleBand )                                                                                                                                                       |
 | xScale            | d3Scale.scaleLinear                      | Same as `yScale` but for the x axis                                                                                                                                                                                                                            |
-| svg               | `{}`                                     | an object containing all the props that should be passed down to the underlying `react-native-svg` component. [See available props](https://github.com/react-native-community/react-native-svg#common-props)                                                   |
 | animate           | false                                    | PropTypes.bool                                                                                                                                                                                                                                                 |
 | animationDuration | 300                                      | PropTypes.number                                                                                                                                                                                                                                               |
-| style             | undefined                                | Supports all [ViewStyleProps](https://facebook.github.io/react-native/docs/view-style-props)                                                                                                                                                                   |
 | curve             | d3.curveLinear                           | A function like [this](https://github.com/d3/d3-shape#curves)                                                                                                                                                                                                  |
 | contentInset      | { top: 0, left: 0, right: 0, bottom: 0 } | An object that specifies how much fake "margin" to use inside of the SVG canvas. This is particularly helpful on Android where `overflow: "visible"` isn't supported and might cause clipping. Note: important to have same contentInset on axis's and chart   |
 | numberOfTicks     | 10                                       | We use [d3-array](https://github.com/d3/d3-array#ticks) to evenly distribute the grid and dataPoints on the yAxis. This prop specifies how many "ticks" we should try to render. Note: important that this prop is the same on both the chart and on the yAxis |
@@ -71,7 +77,6 @@ See each chart for information on what data the decorator will be called with.
 | yMax              | undefined                                | Alter how the chart bounds are calculated                                                                                                                                                                                                                      |
 | xMin              | undefined                                | Alter how the chart bounds are calculated                                                                                                                                                                                                                      |
 | xMax              | undefined                                | Alter how the chart bounds are calculated                                                                                                                                                                                                                      |
-| children          | undefined                                | One or many `react-native-svg` components that will be used to enhance your chart                                                                                                                                                                              |
 
 ## Common arguments to children
 

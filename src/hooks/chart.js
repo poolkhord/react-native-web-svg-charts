@@ -1,6 +1,37 @@
 import * as array from "d3-array";
 import * as scale from "d3-scale";
 
+/**
+ * @typedef {object} Options
+ * @property {number} width
+ * @property {number} height
+ * @property {{}[] | number[] | [][]} data
+ * @property {number} [gridMin]
+ * @property {number} [gridMax]
+ * @property {boolean} [clampY]
+ * @property {boolean} [clampX]
+ * @property {number} [yMin]
+ * @property {number} [yMax]
+ * @property {number} [xMin]
+ * @property {number} [xMax]
+ * @property {boolean} [isMultiple=false]
+ * @property {{ top: number, bottom: number, left: number, right: number }} [contentInset]
+ * @property {number} [numberOfTicks]
+ * @property {scale.scaleLinear} [yScale]
+ * @property {scale.scaleLinear} [xScale]
+ * @property {() => any} [xAccessor]
+ * @property {() => any} [yAccessor]
+ */
+
+/**
+ * @param {Options} options
+  @returns {{ 
+    x: () => number,
+    y: () => number,
+    mappedData: any,
+    ticks: number[],
+    ticksX: number[]}}
+ */
 export function useChart({
   width,
   height,
@@ -68,7 +99,6 @@ export function useChart({
   return {
     x,
     y,
-    data,
     mappedData,
     ticks,
     ticksX,

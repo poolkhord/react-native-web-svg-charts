@@ -1,5 +1,20 @@
 import * as shape from "d3-shape";
 
+/**
+ * @typedef {object} Options
+ * @property {number} x
+ * @property {number} y
+ * @property {any} mappedData
+ * @property {(context: any) => any} [curve=shape.curveLinear]
+ * @property {number} [start]
+ */
+
+/**
+ * @param {Options} options
+  @returns {{ 
+    area: number[],
+  }}
+ */
 export function useArea({
   mappedData,
   x,

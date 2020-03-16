@@ -4,6 +4,7 @@
   "private": false,
   "description": "(fork react-native-svg-charts) Customizable charts (Line, Bar, Area, Pie, Circle, Progress) for React Native (web)",
   "main": "src/index.js",
+  "type": "src/index.js",
   "scripts": {
     "lint": "eslint --ext '.js' .",
     "test": "jest"

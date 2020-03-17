@@ -1,5 +1,5 @@
 import React from "react";
-import { stackAreaExtractDataPoints, YAxis, Grid, Path } from "../../../src";
+import { YAxis, Grid, Path } from "../../../src";
 import * as shape from "d3-shape";
 import { View } from "react-native";
 import { Chart } from "../../../src/chart/newChart";
@@ -47,7 +47,7 @@ const AreaStackWithAxisExample = () => {
 
   const { width, height, onLayout } = useLayout();
 
-  const { areas, ticks, y } = useStackArea({
+  const { areas, ticks, y, yValues } = useStackArea({
     width,
     height,
     data,
@@ -66,7 +66,7 @@ const AreaStackWithAxisExample = () => {
       </Chart>
       <YAxis
         style={{ position: "absolute", top: 0, bottom: 0 }}
-        data={stackAreaExtractDataPoints(data, keys)}
+        data={yValues}
         contentInset={{ top: 10, bottom: 10 }}
         svg={{
           fontSize: 8,

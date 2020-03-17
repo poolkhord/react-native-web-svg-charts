@@ -32,6 +32,7 @@ import * as scale from "d3-scale";
     y: () => number,
     ticks: number[],
     areas: {path: string, line: string, key: string}[]
+    yValues: number[],
   }}
  */
 export function useStackArea({
@@ -115,21 +116,6 @@ export function useStackArea({
     y,
     ticks,
     areas,
+    yValues,
   };
-}
-
-export function stackAreaExtractDataPoints(
-  data,
-  keys,
-  order = shape.stackOrderNone,
-  offset = shape.stackOffsetNone,
-) {
-  const series = shape
-    .stack()
-    .keys(keys)
-    .order(order)
-    .offset(offset)(data);
-
-  //double merge arrays to extract just the values
-  return array.merge(array.merge(series));
 }

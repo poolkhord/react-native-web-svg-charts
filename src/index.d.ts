@@ -7,15 +7,7 @@ import YAxis from "./y-axis";
 import Decorators from "./chart-decorators";
 import Grid from "./grid";
 import Path from "./animated-path";
-
-import {
-  useArea,
-  useChart,
-  useLayout,
-  useLine,
-  useStackArea,
-  stackAreaExtractDataPoints,
-} from "./hooks";
+import { useArea, useChart, useLayout, useLine, useStackArea } from "./hooks";
 import { Chart } from "./chart/newChart";
 
 export {
@@ -24,7 +16,6 @@ export {
   useLayout,
   useLine,
   useStackArea,
-  stackAreaExtractDataPoints,
   Chart,
   PieChart,
   StackedBarChart,

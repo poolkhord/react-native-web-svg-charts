@@ -1,10 +1,8 @@
-# react-native-web-svg-charts
-
 [![version](https://img.shields.io/npm/v/react-native-web-svg-charts.svg)](https://www.npmjs.com/package/react-native-web-svg-charts)
 [![downloads](https://img.shields.io/npm/dm/react-native-web-svg-charts.svg)](https://www.npmjs.com/package/react-native-web-svg-charts)
 [![license](https://img.shields.io/npm/l/react-native-web-svg-charts.svg)](https://www.npmjs.com/package/react-native-web-svg-charts)
 
-Welcome to react-native-web-svg-charts!
+# react-native-web-svg-charts
 
 A much improved decorator system has been introduced, allowing for greater flexibility and less complexity.
 See [releases](https://github.com/poolkhord/react-native-web-svg-charts/releases) for more information.
@@ -20,10 +18,15 @@ This README will try to keep things as simple as possible so that everybody can 
 
 To run examples
 
-```$
-cd web
+```bash
 yarn
+
+cd web
+
+yarn
+
 yarn start
+
 ```
 
 ## Prerequisites
@@ -806,18 +809,3 @@ Simply place it as child to the chart of your choice and (if necessary) set its 
 ## Contributing
 
 Feedback and PR's are more than welcome 🙂
-
-#### Running
-
-Clone the repo and run the following:
-
-```bash
-yarn
-
-cd web
-
-yarn
-
-yarn start
-
-```

@@ -1,6 +1,6 @@
 {
   "name": "react-native-web-svg-charts",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "private": false,
   "description": "(fork react-native-svg-charts) Customizable charts (Line, Bar, Area, Pie, Circle, Progress) for React Native (web)",
   "main": "src/index.js",

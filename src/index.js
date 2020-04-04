@@ -7,7 +7,11 @@ import YAxis from "./y-axis";
 import Decorators from "./chart-decorators";
 import Grid from "./grid";
 import Path from "./animated-path";
-import { useArea, useChart, useLayout, useLine, useStackArea } from "./hooks";
+import { useArea } from "./hooks/area";
+import { useLine } from "./hooks/line";
+import { useChart } from "./hooks/chart";
+import { useStackArea } from "./hooks/stackArea";
+import { useLayout } from "./hooks/layout";
 import { Chart } from "./chart/newChart";
 
 export {

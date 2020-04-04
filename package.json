@@ -4,14 +4,14 @@
   "private": false,
   "description": "(fork react-native-svg-charts) Customizable charts (Line, Bar, Area, Pie, Circle, Progress) for React Native (web)",
   "main": "src/index.js",
-  "type": "src/index.d.ts",
+  "typings": "src/index.js",
   "scripts": {
     "lint": "eslint --ext '.js' .",
     "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/poolkhord/react-native--web-svg-charts.git"
+    "url": "git+https://github.com/poolkhord/react-native-web-svg-charts.git"
   },
   "author": "Hossein mohammadi (https://github.com/hosseinmd)",
   "dependencies": {

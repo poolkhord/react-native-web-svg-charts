@@ -5,15 +5,15 @@ import * as shape from "d3-shape";
  * @property {number} x
  * @property {number} y
  * @property {any} mappedData
- * @property {(context: any) => any} [curve=shape.curveLinear]
+ * @property {(context: any) => any} [curve] Default is `shape.curveLinear`
  */
 
 /**
  * @param {Options} options
-  @returns {{ 
-    line: number[],
-    lines: number[],
-  }}
+ * @returns {{
+  line: number[];
+  lines: number[];
+}}
  */
 export function useLine({ mappedData, x, y, curve = shape.curveLinear }) {
   let lines;

@@ -94,12 +94,12 @@ class ProgressCircle extends PureComponent {
                 }
                 return null;
               })}
-              {arcs.map((shape, index) => {
+              {arcs.map(({ path, color }, index) => {
                 return (
                   <Path
                     key={index}
-                    fill={shape.color}
-                    d={shape.path}
+                    fill={color}
+                    d={path}
                     animate={animate}
                     animationDuration={animateDuration}
                   />

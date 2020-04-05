@@ -16,10 +16,10 @@ import * as scale from "d3-scale";
  * @property {number} [yMax]
  * @property {number} [xMin]
  * @property {number} [xMax]
- * @property {(context: any) => any} [curve=shape.curveLinear]
- * @property {shape.stackOffsetNone} [offset=shape.stackOffsetNone]
- * @property {shape.stackOrderNone} [order=shape.stackOrderNone]
- * @property {{ top: number, bottom: number, left: number, right: number }} [contentInset]
+ * @property {(context: any) => any} [curve] Default is `shape.curveLinear`
+ * @property {shape.stackOffsetNone} [offset] Default is `shape.stackOffsetNone`
+ * @property {shape.stackOrderNone} [order] Default is `shape.stackOrderNone`
+ * @property {{ top: number; bottom: number; left: number; right: number }} [contentInset]
  * @property {number} [numberOfTicks]
  * @property {scale.scaleLinear} [xScale]
  * @property {() => any} [xAccessor]
@@ -27,13 +27,13 @@ import * as scale from "d3-scale";
 
 /**
  * @param {Options} options
-  @returns {{ 
-    x: () => number,
-    y: () => number,
-    ticks: number[],
-    areas: {path: string, line: string, key: string}[]
-    yValues: number[],
-  }}
+ * @returns {{
+  x: () => number;
+  y: () => number;
+  ticks: number[];
+  areas: { path: string; line: string; key: string }[];
+  yValues: number[];
+}}
  */
 export function useStackArea({
   width,

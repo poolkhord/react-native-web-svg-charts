@@ -79,8 +79,8 @@ const Direction = {
 
 /**
  * @typedef {object} _GridProps
- * @property {(keyof Direction)} [direction] default `HORIZONTAL`
- * @property {boolean} [belowChart] default true
+ * @property {keyof Direction} [direction] Default `HORIZONTAL`
+ * @property {boolean} [belowChart] Default true
  */
 
 /**

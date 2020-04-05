@@ -14,8 +14,8 @@ import * as scale from "d3-scale";
  * @property {number} [yMax]
  * @property {number} [xMin]
  * @property {number} [xMax]
- * @property {boolean} [isMultiple=false]
- * @property {{ top: number, bottom: number, left: number, right: number }} [contentInset]
+ * @property {boolean} [isMultiple] Default is `false`
+ * @property {{ top: number; bottom: number; left: number; right: number }} [contentInset]
  * @property {number} [numberOfTicks]
  * @property {scale.scaleLinear} [yScale]
  * @property {scale.scaleLinear} [xScale]
@@ -25,12 +25,13 @@ import * as scale from "d3-scale";
 
 /**
  * @param {Options} options
-  @returns {{ 
-    x: () => number,
-    y: () => number,
-    mappedData: any,
-    ticks: number[],
-    ticksX: number[]}}
+ * @returns {{
+  x: () => number;
+  y: () => number;
+  mappedData: any;
+  ticks: number[];
+  ticksX: number[];
+}}
  */
 export function useChart({
   width,

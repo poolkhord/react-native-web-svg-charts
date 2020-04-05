@@ -68,14 +68,12 @@ const AreaStackWithAxisExample = () => {
         style={{ position: "absolute", top: 0, bottom: 0 }}
         data={yValues}
         contentInset={{ top: 10, bottom: 10 }}
-        svg={{
-          fontSize: 8,
-          fill: "white",
-          stroke: "black",
-          strokeWidth: 0.1,
-          alignmentBaseline: "baseline",
-          baselineShift: "3",
-        }}
+        fontSize={8}
+        fill="white"
+        stroke="black"
+        strokeWidth={0.1}
+        alignmentBaseline="baseline"
+        baselineShift="3"
       />
     </View>
   );

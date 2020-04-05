@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import PropTypes from "prop-types";
 import Svg from "react-native-svg";
 import * as array from "d3-array";
@@ -304,7 +304,10 @@ class StackedBarGrouped extends PureComponent {
 
     return (
       <View style={style}>
-        <View style={{ flex: 1 }} onLayout={event => this._onLayout(event)}>
+        <View
+          style={styles.container}
+          onLayout={event => this._onLayout(event)}
+        >
           {height > 0 && width > 0 && (
             <Svg style={{ height, width }}>
               {React.Children.map(children, child => {
@@ -347,6 +350,12 @@ class StackedBarGrouped extends PureComponent {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
 StackedBarGrouped.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object),

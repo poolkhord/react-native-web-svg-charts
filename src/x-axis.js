@@ -6,23 +6,40 @@ import Svg, { G, Text as SVGText } from "react-native-svg";
 import { useLayout, useInlineStyle } from "./hooks";
 
 /**
- * @typedef {object} YAxisProps
- * @property {number} [spacingOuter] Default is `0.05`
- * @property {number} [spacingInner] Default is `0.05`
- * @property {d3Scale.scaleLinear} [scale] Default is `d3Scale.scaleLinear`
- * @property {()=>any} [xAccessor]
+ * @typedef {object} XAxisProps
+ * @property {number} [spacingOuter] Spacing between the labels. Only applicable
+ * if `scale=d3Scale.scaleBand` and should then be equal to `spacingOuter` prop
+ * on the actual BarChart Default is `0.05`
+ *
+ * @property {number} [spacingInner] Spacing between the labels. Only applicable
+ * if `scale=d3Scale.scaleBand` and should then be equal to `spacingInner` prop
+ * on the actual BarChart Default is `0.05`
+ *
+ * @property {d3Scale.scaleLinear} [scale] Should be the same as passed into the
+ * charts `xScale` Default is `d3Scale.scaleLinear`
+ *
+ * @property {() => any} [xAccessor] Default is `({index}) => index`
  * @property {number} [max]
  * @property {number} [min]
- * @property {{left: number, right: number}} [contentInset]
- * @property {()=> any} [formatLabel]
+ * @property {{ left: number; right: number }} [contentInset] Used to sync
+ * layout with chart (if same prop used there) Default is { left: 0, right: 0 }
+ *
+ * @property {() => any} [formatLabel] A utility function to format the text
+ * before it is displayed, e.g `value => "day" + value`. Passes back the value
+ * provided by the `xAccessor` Default is `value => value`
+ *
  * @property {number} [numberOfTicks] Default is `10`
- * @property {import("react-native").ViewStyle} [style]
  * @property {import("react-native-svg").TextProps} [svg]
- * @property {number[] | {}[]} [data]
+ * @property {(number | {})[]} data An array of values or objects to render on
+ * the xAxis. Should preferably have the same length as the chart's dataPoints.
+ * If a complex object is used instead of a simple value, a `xAccessor` prop
+ * **is required** to calculate the axis' extent. A data object can contain a
+ * `svg` property which allows you to override styles on that specific object
+ *
  */
 
 /**
- * @type {React.FC<YAxisProps>}
+ * @type {React.FC<XAxisProps & import("react-native-svg").TextProps>}
  */
 const XAxis = memo(
   ({
@@ -35,10 +52,10 @@ const XAxis = memo(
     max,
     spacingInner = 0.05,
     spacingOuter = 0.05,
-    svg = {},
     xAccessor = ({ index }) => index,
     scale = d3Scale.scaleLinear,
     formatLabel = value => value,
+    ...svg
   }) => {
     const { width, height, onLayout } = useLayout();
     const _getX = domain => {
@@ -105,7 +122,7 @@ const XAxis = memo(
                 // causes rendering issues
                 width > 0 &&
                   ticks.map((value, index) => {
-                    const { svg: valueSvg = {} } = data[index] || {};
+                    const { svg: valueSvg } = data[index] || {};
 
                     return (
                       <SVGText

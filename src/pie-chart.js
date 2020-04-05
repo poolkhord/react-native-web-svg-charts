@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { View, Platform } from "react-native";
+import { View, Platform, StyleSheet } from "react-native";
 import PropTypes from "prop-types";
 import * as shape from "d3-shape";
 import Svg, { G, Path } from "react-native-svg";
@@ -138,7 +138,7 @@ class PieChart extends PureComponent {
       <View pointerEvents={"box-none"} style={style}>
         <View
           pointerEvents={"box-none"}
-          style={{ flex: 1 }}
+          style={styles.container}
           onLayout={event => this._onLayout(event)}
         >
           {height > 0 && width > 0 && (
@@ -181,6 +181,12 @@ class PieChart extends PureComponent {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
 PieChart.propTypes = {
   data: PropTypes.arrayOf(

@@ -667,10 +667,8 @@ class YAxisExample extends React.PureComponent {
         <YAxis
           data={data}
           contentInset={contentInset}
-          svg={{
-            fill: "grey",
-            fontSize: 10,
-          }}
+          fill="grey"
+          fontSize={10}
           numberOfTicks={10}
           formatLabel={value => `${value}ºC`}
         />
@@ -688,28 +686,9 @@ class YAxisExample extends React.PureComponent {
 }
 ```
 
-#### Props
-
-(see [Common Props](#common-props))
-
-| Property     | Default               | Description                                                                                                                                        |
-| ------------ | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| scale        | `d3Scale.scaleLinear` | Should be the same as passed into the charts `yScale`, _or_ d3Scale.scaleBand if used in conjunction with a horizontal BarChart                    |
-| svg          | `{}`                  | supports all svg props an svg text normally supports                                                                                               |
-| spacingInner | 0.05                  | Spacing between the labels. Only applicable if `scale=d3Scale.scaleBand` and should then be equal to `spacingInner` prop on the actual BarChart    |
-| spacingOuter | 0.05                  | Spacing outside of the labels. Only applicable if `scale=d3Scale.scaleBand` and should then be equal to `spacingOuter` prop on the actual BarChart |
-| formatLabel  | `value => {}`         | A utility function to format the text before it is displayed, e.g `value => "\$" + value                                                           |
-| contentInset | { top: 0, bottom: 0 } | Used to sync layout with chart (if same prop used there)                                                                                           |
-| min          | undefined             | Used to sync layout with chart (if gridMin is used there)                                                                                          |
-| max          | undefined             | Used to sync layout with chart (if gridMax is used there)                                                                                          |
-
-#### Arguments to children
-
-No arguments
-
 ### XAxis
 
-![Line chart](https://raw.githubusercontent.com/jesperlekland/react-native-web-svg-charts/master/screenshots/x-axis.png)
+![Line chart](https://github.com/poolkhord/react-native-web-svg-charts/raw/master/screenshots/x-axis.png)
 
 A helper component to layout your X-axis labels on the same coordinates as your chart.
 It's very important that the component has the exact same view bounds (preferably wrapped in the same parent view) as the chart it's supposed to match.
@@ -760,38 +739,14 @@ class XAxisExample extends React.PureComponent {
           data={data}
           formatLabel={(value, index) => index}
           contentInset={{ left: 10, right: 10 }}
-          svg={{ fontSize: 10, fill: "black" }}
+          fontSize={10}
+          fill="black"
         />
       </View>
     );
   }
 }
 ```
-
-#### Props
-
-| Property     | Default               | Description                                                                                                                                                                                                                                                                                                                                             |
-| ------------ | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| data         | **required**          | An array of values or objects to render on the xAxis. Should preferably have the same length as the chart's dataPoints. If a complex object is used instead of a simple value, a `xAccessor` prop **is required** to calculate the axis' extent. A data object can contain a `svg` property which allows you to override styles on that specific object |
-| scale        | `d3Scale.scaleLinear` | Should be the same as passed into the charts `xScale`                                                                                                                                                                                                                                                                                                   |
-| spacingInner | 0.05                  | Spacing between the labels. Only applicable if `scale=d3Scale.scaleBand` and should then be equal to `spacingInner` prop on the actual BarChart                                                                                                                                                                                                         |
-| spacingOuter | 0.05                  | Spacing between the labels. Only applicable if `scale=d3Scale.scaleBand` and should then be equal to `spacingOuter` prop on the actual BarChart                                                                                                                                                                                                         |
-| svg          | `{}`                  | Default svg props **for all labels**. Supports all svg props an svg text normally supports. This styles will be overridden if there are specific styles for a given data object                                                                                                                                                                         |
-| formatLabel  | `value => value`      | A utility function to format the text before it is displayed, e.g `value => "day" + value`. Passes back the value provided by the `xAccessor`                                                                                                                                                                                                           |
-| contentInset | { left: 0, right: 0 } | Used to sync layout with chart (if same prop used there)                                                                                                                                                                                                                                                                                                |
-
-#### Arguments to children
-
-No arguments
-
-### Children
-
-New for version 5.0.
-Each chart (and axes) component now accepts React children. _Important_ note is that all children must be a `react-native-svg` component
-on order for it to be rendered by the chart. This API deprecates the old one with `extras` and `decorators`.
-Everything that should be rendered above or below the chart should now be supplied as a child to said chart.
-This allows you to declare the order in which your decorators should be rendered. If you want anything rendered below the chart,
-simply add the prop `belowChart={true}`. There's a ton of examples in the [examples repo](https://github.com/JesperLekland/react-native-web-svg-charts-examples), go and have a look.
 
 ### Grid
 

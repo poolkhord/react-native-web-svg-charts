@@ -8,14 +8,32 @@ import { useInlineStyle } from "./hooks";
 
 /**
  * @typedef {object} YAxisProps
- * @property {number} [spacingOuter] Default is `0.05`
- * @property {number} [spacingInner] Default is `0.05`
- * @property {d3Scale.scaleLinear} [scale] Default is `d3Scale.scaleLinear`
- * @property {()=>any} [yAccessor]
- * @property {number} [max]
- * @property {number} [min]
- * @property {{top: number,bottom: number}} [contentInset]
- * @property {()=> any} [formatLabel]
+ * @property {number} [spacingOuter] Spacing outside of the labels. Only
+ * applicable if `scale=d3Scale.scaleBand` and should then be equal to
+ * `spacingOuter` prop on the actual BarChart Default is `0.05`
+ *
+ * @property {number} [spacingInner] Spacing between the labels. Only applicable
+ * if `scale=d3Scale.scaleBand` and should then be equal to `spacingInner` prop
+ * on the actual BarChart Default is `0.05`
+ *
+ * @property {d3Scale.scaleLinear} [scale] Should be the same as passed into the
+ * charts `yScale`, _or_ d3Scale.scaleBand if used in conjunction with a
+ * horizontal BarChart Default is `d3Scale.scaleLinear`
+ *
+ * @property {() => any} [yAccessor]
+ * @property {number} [max] Used to sync layout with chart (if gridMax is used
+ * there)
+ *
+ * @property {number} [min] Used to sync layout with chart (if gridMin is used
+ * there)
+ *
+ * @property {{ top: number; bottom: number }} [contentInset] Used to sync
+ * layout with chart (if same prop used there) Default is { top: 0, bottom: 0 }
+ *
+ * @property {() => any} [formatLabel] A utility function to format the text
+ * before it is displayed, e.g `value => "\$" + value Default is `value =>
+ * value`
+ *
  * @property {number} [numberOfTicks] Default is `10`
  * @property {import("react-native").ViewStyle} [style]
  * @property {import("react-native-svg").TextProps} [svg]
@@ -23,7 +41,7 @@ import { useInlineStyle } from "./hooks";
  */
 
 /**
- * @type {React.FC<YAxisProps>}
+ * @type {React.FC<YAxisProps & import("react-native-svg").TextProps>}
  */
 const YAxis = memo(
   ({
@@ -34,12 +52,12 @@ const YAxis = memo(
     numberOfTicks = 10,
     spacingInner = 0.05,
     spacingOuter = 0.05,
-    svg = {},
     scale = d3Scale.scaleLinear,
     formatLabel = value => value && value.toString(),
     yAccessor = ({ item }) => item,
     min,
     max,
+    ...svg
   }) => {
     const { width, height, onLayout } = useLayout();
 

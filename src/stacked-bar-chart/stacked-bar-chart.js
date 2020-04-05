@@ -3,7 +3,7 @@ import * as scale from "d3-scale";
 import * as shape from "d3-shape";
 import PropTypes from "prop-types";
 import React, { PureComponent } from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import Svg from "react-native-svg";
 import Path from "../animated-path";
 
@@ -212,7 +212,10 @@ class BarChart extends PureComponent {
 
     return (
       <View style={style}>
-        <View style={{ flex: 1 }} onLayout={event => this._onLayout(event)}>
+        <View
+          style={styles.container}
+          onLayout={event => this._onLayout(event)}
+        >
           {height > 0 && width > 0 && (
             <Svg style={{ height, width }}>
               {React.Children.map(children, child => {
@@ -250,6 +253,12 @@ class BarChart extends PureComponent {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
 BarChart.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object),

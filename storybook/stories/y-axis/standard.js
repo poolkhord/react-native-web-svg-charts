@@ -29,10 +29,8 @@ const YAxisExample = () => {
       <YAxis
         data={data}
         contentInset={contentInset}
-        svg={{
-          fill: "grey",
-          fontSize: 10,
-        }}
+        fill="grey"
+        fontSize={10}
         numberOfTicks={10}
         formatLabel={value => `${value}ºC`}
       />

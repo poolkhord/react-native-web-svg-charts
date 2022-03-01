@@ -1,31 +1,42 @@
-# react-native-web-svg-charts
-
 [![version](https://img.shields.io/npm/v/react-native-web-svg-charts.svg)](https://www.npmjs.com/package/react-native-web-svg-charts)
 [![downloads](https://img.shields.io/npm/dm/react-native-web-svg-charts.svg)](https://www.npmjs.com/package/react-native-web-svg-charts)
 [![license](https://img.shields.io/npm/l/react-native-web-svg-charts.svg)](https://www.npmjs.com/package/react-native-web-svg-charts)
 
-Welcome to react-native-web-svg-charts!
-
-### Looking for maintainers! I alone don't have the time to maintain this library anymore. Preferably looking for somebody who uses this library in their professional work (how I originally got the time to maintain).
-
-### version 5 is now available!
+# react-native-web-svg-charts
 
 A much improved decorator system has been introduced, allowing for greater flexibility and less complexity.
 See [releases](https://github.com/poolkhord/react-native-web-svg-charts/releases) for more information.
 
 ---
 
+### Examples
+
 In order to not bloat this README to much we've moved some examples over to
-[`react-native-web-svg-charts-examples`](https://github.com/poolkhord/react-native-web-svg-charts-examples).
+['Examples'](https://github.com/poolkhord/react-native-web-svg-charts/tree/master/storybook/stories).
 There we will try to showcase the really cool things you can do with this library.
 This README will try to keep things as simple as possible so that everybody can get up and running as fast as possible.
+
+To run examples
+
+```bash
+yarn
+
+cd web
+
+yarn
+
+yarn start
+
+```
 
 ## Prerequisites
 
 This library uses [react-native-svg](https://github.com/react-native-community/react-native-svg)
 to render its graphs. Therefore this library needs to be installed **AND** linked into your project to work.
 
-Other than the above dependency this library uses pure javascript and supports both iOS and Android
+react-native-reanimated for support animated path.
+
+Other than the above dependencies this library uses pure javascript and supports iOS and Android and Web
 
 ## Getting Started
 
@@ -50,7 +61,7 @@ We're very proud of our "decorator" support. All charts can be extended with "de
 Simply pass in a `react-native-svg` compliant component as a child to the graph and it will be called with all the necessary information to layout your decorator.
 See each chart for information on what data the decorator will be called with.
 
-## Common Props
+## Common params
 
 | Property          | Default                                  | Description                                                                                                                                                                                                                                                    |
 | ----------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -59,10 +70,8 @@ See each chart for information on what data the decorator will be called with.
 | xAccessor         | ({ index }) => index                     | Same as `yAccessor` but returns the x-value of that entry                                                                                                                                                                                                      |
 | yScale            | d3Scale.scaleLinear                      | A function that determines the scale of said axis (only tested with scaleLinear, scaleTime & scaleBand )                                                                                                                                                       |
 | xScale            | d3Scale.scaleLinear                      | Same as `yScale` but for the x axis                                                                                                                                                                                                                            |
-| svg               | `{}`                                     | an object containing all the props that should be passed down to the underlying `react-native-svg` component. [See available props](https://github.com/react-native-community/react-native-svg#common-props)                                                   |
 | animate           | false                                    | PropTypes.bool                                                                                                                                                                                                                                                 |
 | animationDuration | 300                                      | PropTypes.number                                                                                                                                                                                                                                               |
-| style             | undefined                                | Supports all [ViewStyleProps](https://facebook.github.io/react-native/docs/view-style-props)                                                                                                                                                                   |
 | curve             | d3.curveLinear                           | A function like [this](https://github.com/d3/d3-shape#curves)                                                                                                                                                                                                  |
 | contentInset      | { top: 0, left: 0, right: 0, bottom: 0 } | An object that specifies how much fake "margin" to use inside of the SVG canvas. This is particularly helpful on Android where `overflow: "visible"` isn't supported and might cause clipping. Note: important to have same contentInset on axis's and chart   |
 | numberOfTicks     | 10                                       | We use [d3-array](https://github.com/d3/d3-array#ticks) to evenly distribute the grid and dataPoints on the yAxis. This prop specifies how many "ticks" we should try to render. Note: important that this prop is the same on both the chart and on the yAxis |
@@ -71,7 +80,6 @@ See each chart for information on what data the decorator will be called with.
 | yMax              | undefined                                | Alter how the chart bounds are calculated                                                                                                                                                                                                                      |
 | xMin              | undefined                                | Alter how the chart bounds are calculated                                                                                                                                                                                                                      |
 | xMax              | undefined                                | Alter how the chart bounds are calculated                                                                                                                                                                                                                      |
-| children          | undefined                                | One or many `react-native-svg` components that will be used to enhance your chart                                                                                                                                                                              |
 
 ## Common arguments to children
 
@@ -230,7 +238,6 @@ const AreaStackChartExample = () => {
     height,
     data,
     keys,
-    colors,
     curve: shape.curveNatural,
   });
 
@@ -240,11 +247,18 @@ const AreaStackChartExample = () => {
       {...{ width, height, onLayout }}
     >
       <Grid {...{ y, ticks }} />
-      {areas.map(({ path, key, color }, index) => (
-        <Path key={key} fill={color} {...svgs[index]} d={path} />
+      {areas.map(({ path, line, key }, index) => (
+        <Fragment {...{ key }}>
+          <Path fill={colors[index]} {...svgs[index]} d={path} />
+          <Line {...{ line }} />
+        </Fragment>
       ))}
     </Chart>
   );
+};
+
+const Line = ({ line }) => {
+  return <Path d={line} stroke={"green"} fill={"none"} />;
 };
 ```
 
@@ -653,10 +667,8 @@ class YAxisExample extends React.PureComponent {
         <YAxis
           data={data}
           contentInset={contentInset}
-          svg={{
-            fill: "grey",
-            fontSize: 10,
-          }}
+          fill="grey"
+          fontSize={10}
           numberOfTicks={10}
           formatLabel={value => `${value}ºC`}
         />
@@ -674,28 +686,9 @@ class YAxisExample extends React.PureComponent {
 }
 ```
 
-#### Props
-
-(see [Common Props](#common-props))
-
-| Property     | Default               | Description                                                                                                                                        |
-| ------------ | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| scale        | `d3Scale.scaleLinear` | Should be the same as passed into the charts `yScale`, _or_ d3Scale.scaleBand if used in conjunction with a horizontal BarChart                    |
-| svg          | `{}`                  | supports all svg props an svg text normally supports                                                                                               |
-| spacingInner | 0.05                  | Spacing between the labels. Only applicable if `scale=d3Scale.scaleBand` and should then be equal to `spacingInner` prop on the actual BarChart    |
-| spacingOuter | 0.05                  | Spacing outside of the labels. Only applicable if `scale=d3Scale.scaleBand` and should then be equal to `spacingOuter` prop on the actual BarChart |
-| formatLabel  | `value => {}`         | A utility function to format the text before it is displayed, e.g `value => "\$" + value                                                           |
-| contentInset | { top: 0, bottom: 0 } | Used to sync layout with chart (if same prop used there)                                                                                           |
-| min          | undefined             | Used to sync layout with chart (if gridMin is used there)                                                                                          |
-| max          | undefined             | Used to sync layout with chart (if gridMax is used there)                                                                                          |
-
-#### Arguments to children
-
-No arguments
-
 ### XAxis
 
-![Line chart](https://raw.githubusercontent.com/jesperlekland/react-native-web-svg-charts/master/screenshots/x-axis.png)
+![Line chart](https://github.com/poolkhord/react-native-web-svg-charts/raw/master/screenshots/x-axis.png)
 
 A helper component to layout your X-axis labels on the same coordinates as your chart.
 It's very important that the component has the exact same view bounds (preferably wrapped in the same parent view) as the chart it's supposed to match.
@@ -746,38 +739,14 @@ class XAxisExample extends React.PureComponent {
           data={data}
           formatLabel={(value, index) => index}
           contentInset={{ left: 10, right: 10 }}
-          svg={{ fontSize: 10, fill: "black" }}
+          fontSize={10}
+          fill="black"
         />
       </View>
     );
   }
 }
 ```
-
-#### Props
-
-| Property     | Default               | Description                                                                                                                                                                                                                                                                                                                                             |
-| ------------ | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| data         | **required**          | An array of values or objects to render on the xAxis. Should preferably have the same length as the chart's dataPoints. If a complex object is used instead of a simple value, a `xAccessor` prop **is required** to calculate the axis' extent. A data object can contain a `svg` property which allows you to override styles on that specific object |
-| scale        | `d3Scale.scaleLinear` | Should be the same as passed into the charts `xScale`                                                                                                                                                                                                                                                                                                   |
-| spacingInner | 0.05                  | Spacing between the labels. Only applicable if `scale=d3Scale.scaleBand` and should then be equal to `spacingInner` prop on the actual BarChart                                                                                                                                                                                                         |
-| spacingOuter | 0.05                  | Spacing between the labels. Only applicable if `scale=d3Scale.scaleBand` and should then be equal to `spacingOuter` prop on the actual BarChart                                                                                                                                                                                                         |
-| svg          | `{}`                  | Default svg props **for all labels**. Supports all svg props an svg text normally supports. This styles will be overridden if there are specific styles for a given data object                                                                                                                                                                         |
-| formatLabel  | `value => value`      | A utility function to format the text before it is displayed, e.g `value => "day" + value`. Passes back the value provided by the `xAccessor`                                                                                                                                                                                                           |
-| contentInset | { left: 0, right: 0 } | Used to sync layout with chart (if same prop used there)                                                                                                                                                                                                                                                                                                |
-
-#### Arguments to children
-
-No arguments
-
-### Children
-
-New for version 5.0.
-Each chart (and axes) component now accepts React children. _Important_ note is that all children must be a `react-native-svg` component
-on order for it to be rendered by the chart. This API deprecates the old one with `extras` and `decorators`.
-Everything that should be rendered above or below the chart should now be supplied as a child to said chart.
-This allows you to declare the order in which your decorators should be rendered. If you want anything rendered below the chart,
-simply add the prop `belowChart={true}`. There's a ton of examples in the [examples repo](https://github.com/JesperLekland/react-native-web-svg-charts-examples), go and have a look.
 
 ### Grid
 
@@ -795,18 +764,3 @@ Simply place it as child to the chart of your choice and (if necessary) set its 
 ## Contributing
 
 Feedback and PR's are more than welcome 🙂
-
-#### Running
-
-Clone the repo and run the following:
-
-```bash
-yarn
-
-cd web
-
-yarn
-
-yarn start
-
-```

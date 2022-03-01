@@ -1,71 +1,77 @@
-import React, { PureComponent } from "react";
-import PropTypes from "prop-types";
-import { Text, View } from "react-native";
+import React, { memo } from "react";
+import { Text, View, StyleSheet } from "react-native";
 import * as d3Scale from "d3-scale";
 import * as array from "d3-array";
 import Svg, { G, Text as SVGText } from "react-native-svg";
+import { useLayout, useInlineStyle } from "./hooks";
 
-class XAxis extends PureComponent {
-  state = {
-    width: 0,
-    height: 0,
-  };
+/**
+ * @typedef {object} XAxisProps
+ * @property {number} [spacingOuter] Spacing between the labels. Only applicable
+ * if `scale=d3Scale.scaleBand` and should then be equal to `spacingOuter` prop
+ * on the actual BarChart Default is `0.05`
+ *
+ * @property {number} [spacingInner] Spacing between the labels. Only applicable
+ * if `scale=d3Scale.scaleBand` and should then be equal to `spacingInner` prop
+ * on the actual BarChart Default is `0.05`
+ *
+ * @property {d3Scale.scaleLinear} [scale] Should be the same as passed into the
+ * charts `xScale` Default is `d3Scale.scaleLinear`
+ *
+ * @property {() => any} [xAccessor] Default is `({index}) => index`
+ * @property {number} [max]
+ * @property {number} [min]
+ * @property {{ left: number; right: number }} [contentInset] Used to sync
+ * layout with chart (if same prop used there) Default is { left: 0, right: 0 }
+ *
+ * @property {() => any} [formatLabel] A utility function to format the text
+ * before it is displayed, e.g `value => "day" + value`. Passes back the value
+ * provided by the `xAccessor` Default is `value => value`
+ *
+ * @property {number} [numberOfTicks] Default is `10`
+ * @property {import("react-native-svg").TextProps} [svg]
+ * @property {(number | {})[]} data An array of values or objects to render on
+ * the xAxis. Should preferably have the same length as the chart's dataPoints.
+ * If a complex object is used instead of a simple value, a `xAccessor` prop
+ * **is required** to calculate the axis' extent. A data object can contain a
+ * `svg` property which allows you to override styles on that specific object
+ *
+ */
 
-  _onLayout(event) {
-    const {
-      nativeEvent: {
-        layout: { width, height },
-      },
-    } = event;
+/**
+ * @type {React.FC<XAxisProps & import("react-native-svg").TextProps>}
+ */
+const XAxis = memo(
+  ({
+    contentInset: { left = 0, right = 0 } = {},
+    style,
+    data,
+    numberOfTicks,
+    children,
+    min,
+    max,
+    spacingInner = 0.05,
+    spacingOuter = 0.05,
+    xAccessor = ({ index }) => index,
+    scale = d3Scale.scaleLinear,
+    formatLabel = value => value,
+    ...svg
+  }) => {
+    const { width, height, onLayout } = useLayout();
+    const _getX = domain => {
+      const x = scale()
+        .domain(domain)
+        .range([left, width - right]);
 
-    if (width !== this.state.width) {
-      this.setState({ width, height });
-    }
-  }
+      if (scale === d3Scale.scaleBand) {
+        x.paddingInner([spacingInner]).paddingOuter([spacingOuter]);
 
-  _getX(domain) {
-    const {
-      scale,
-      spacingInner,
-      spacingOuter,
-      contentInset: { left = 0, right = 0 },
-    } = this.props;
+        //add half a bar to center label
+        return value => x(value) + x.bandwidth() / 2;
+      }
 
-    const { width } = this.state;
-
-    const x = scale()
-      .domain(domain)
-      .range([left, width - right]);
-
-    if (scale === d3Scale.scaleBand) {
-      x.paddingInner([spacingInner]).paddingOuter([spacingOuter]);
-
-      //add half a bar to center label
-      return value => x(value) + x.bandwidth() / 2;
-    }
-
-    return x;
-  }
-
-  render() {
-    const {
-      style,
-      scale,
-      data,
-      xAccessor,
-      formatLabel,
-      numberOfTicks,
-      svg,
-      children,
-      min,
-      max,
-    } = this.props;
-
-    const { height, width } = this.state;
-
-    if (data.length === 0) {
-      return <View style={style} />;
-    }
+      return x;
+    };
 
     const values = data.map((item, index) => xAccessor({ item, index }));
     const extent = array.extent(values);
@@ -74,7 +80,7 @@ class XAxis extends PureComponent {
         ? values
         : [min || extent[0], max || extent[1]];
 
-    const x = this._getX(domain);
+    const x = _getX(domain);
     const ticks = numberOfTicks ? x.ticks(numberOfTicks) : values;
 
     const extraProps = {
@@ -85,30 +91,29 @@ class XAxis extends PureComponent {
       formatLabel,
     };
 
+    const invisibleTextStyle = useInlineStyle({
+      opacity: 0,
+      fontSize: svg.fontSize,
+      fontFamily: svg.fontFamily,
+      fontWeight: svg.fontWeight,
+    });
+
+    const svgStyle = useInlineStyle({
+      height,
+      width,
+    });
+
+    if (data.length === 0) {
+      return <View style={style} />;
+    }
+
     return (
-      <View style={style}>
-        <View style={{ flexGrow: 1 }} onLayout={event => this._onLayout(event)}>
+      <View {...{ style }}>
+        <View style={styles.container} {...{ onLayout }}>
           {/*invisible text to allow for parent resizing*/}
-          <Text
-            style={{
-              opacity: 0,
-              fontSize: svg.fontSize,
-              fontFamily: svg.fontFamily,
-              fontWeight: svg.fontWeight,
-            }}
-          >
-            {formatLabel(ticks[0], 0)}
-          </Text>
+          <Text style={invisibleTextStyle}>{formatLabel(ticks[0], 0)}</Text>
           {height > 0 && width > 0 && (
-            <Svg
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                height,
-                width,
-              }}
-            >
+            <Svg style={[styles.svg, svgStyle]}>
               <G>
                 {React.Children.map(children, child => {
                   return React.cloneElement(child, extraProps);
@@ -117,7 +122,7 @@ class XAxis extends PureComponent {
                 // causes rendering issues
                 width > 0 &&
                   ticks.map((value, index) => {
-                    const { svg: valueSvg = {} } = data[index] || {};
+                    const { svg: valueSvg } = data[index] || {};
 
                     return (
                       <SVGText
@@ -139,36 +144,18 @@ class XAxis extends PureComponent {
         </View>
       </View>
     );
-  }
-}
+  },
+);
 
-XAxis.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-  ).isRequired,
-  spacingInner: PropTypes.number,
-  spacingOuter: PropTypes.number,
-  formatLabel: PropTypes.func,
-  contentInset: PropTypes.shape({
-    left: PropTypes.number,
-    right: PropTypes.number,
-  }),
-  scale: PropTypes.func,
-  numberOfTicks: PropTypes.number,
-  xAccessor: PropTypes.func,
-  svg: PropTypes.object,
-  min: PropTypes.any,
-  max: PropTypes.any,
-};
-
-XAxis.defaultProps = {
-  spacingInner: 0.05,
-  spacingOuter: 0.05,
-  contentInset: {},
-  svg: {},
-  xAccessor: ({ index }) => index,
-  scale: d3Scale.scaleLinear,
-  formatLabel: value => value,
-};
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+  },
+  svg: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+  },
+});
 
 export default XAxis;

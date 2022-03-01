@@ -2,6 +2,39 @@ import * as shape from "d3-shape";
 import * as array from "d3-array";
 import * as scale from "d3-scale";
 
+/**
+ * @typedef {object} Options
+ * @property {number} width
+ * @property {number} height
+ * @property {{}[] | number[] | [][]} data
+ * @property {string[]} keys
+ * @property {number} [gridMin]
+ * @property {number} [gridMax]
+ * @property {boolean} [clampY]
+ * @property {boolean} [clampX]
+ * @property {number} [yMin]
+ * @property {number} [yMax]
+ * @property {number} [xMin]
+ * @property {number} [xMax]
+ * @property {(context: any) => any} [curve] Default is `shape.curveLinear`
+ * @property {shape.stackOffsetNone} [offset] Default is `shape.stackOffsetNone`
+ * @property {shape.stackOrderNone} [order] Default is `shape.stackOrderNone`
+ * @property {{ top: number; bottom: number; left: number; right: number }} [contentInset]
+ * @property {number} [numberOfTicks]
+ * @property {scale.scaleLinear} [xScale]
+ * @property {() => any} [xAccessor]
+ */
+
+/**
+ * @param {Options} options
+ * @returns {{
+  x: () => number;
+  y: () => number;
+  ticks: number[];
+  areas: { path: string; line: string; key: string }[];
+  yValues: number[];
+}}
+ */
 export function useStackArea({
   width,
   height,
@@ -11,7 +44,6 @@ export function useStackArea({
   gridMax,
   clampY,
   clampX,
-  colors,
   yMin,
   yMax,
   xMin,
@@ -57,17 +89,25 @@ export function useStackArea({
   const ticks = y.ticks(numberOfTicks);
 
   const areas = series.map((serie, index) => {
+    const mappedData = data.map((_, i) => serie[i]);
     const path = shape
       .area()
-      .x((d, index) => x(xAccessor({ item: d.data, index })))
+      .x((d, i) => x(xAccessor({ item: d.data, index: i })))
       .y0(d => y(d[0]))
       .y1(d => y(d[1]))
-      .curve(curve)(data.map((_, index) => serie[index]));
+      .curve(curve)(mappedData);
+
+    const line = shape
+      .line()
+      .x((d, i) => x(xAccessor({ item: d.data, index: i })))
+      .y(d => y(d[0]))
+      .y(d => y(d[1]))
+      .curve(curve)(mappedData);
 
     return {
       path,
+      line,
       key: keys[index],
-      color: colors[index],
     };
   });
 
@@ -76,21 +116,6 @@ export function useStackArea({
     y,
     ticks,
     areas,
+    yValues,
   };
-}
-
-export function stackAreaExtractDataPoints(
-  data,
-  keys,
-  order = shape.stackOrderNone,
-  offset = shape.stackOffsetNone,
-) {
-  const series = shape
-    .stack()
-    .keys(keys)
-    .order(order)
-    .offset(offset)(data);
-
-  //double merge arrays to extract just the values
-  return array.merge(array.merge(series));
 }

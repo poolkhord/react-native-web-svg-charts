@@ -44,7 +44,7 @@ class XAxisExample extends React.PureComponent {
           data={data}
           scale={scale.scaleBand}
           xAccessor={({ item }) => item.value}
-          svg={{ fontWeight: "bold" }}
+          fontWeight="bold"
         />
       </View>
     );

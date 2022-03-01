@@ -68,20 +68,18 @@ const XAxisScaleTimeExample = () => {
       </Chart>
       <XAxis
         data={data}
-        svg={{
-          fill: "black",
-          fontSize: 8,
-          fontWeight: "bold",
-          rotation: 20,
-          originY: 30,
-          y: 5,
-        }}
         xAccessor={({ item }) => item.date}
         scale={scale.scaleTime}
         numberOfTicks={6}
         style={{ marginHorizontal: -15, height: 20 }}
         contentInset={{ left: 10, right: 25 }}
         formatLabel={value => dateFns.format(value, "HH:mm")}
+        fill="black"
+        fontSize={8}
+        fontWeight="bold"
+        rotation={20}
+        originY={30}
+        y={5}
       />
     </View>
   );

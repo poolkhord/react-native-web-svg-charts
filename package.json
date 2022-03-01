@@ -6,6 +6,7 @@
   "main": "src/index.js",
   "scripts": {
     "lint": "eslint --ext '.js' .",
+    "start": "cd web && yarn start",
     "test": "jest"
   },
   "repository": {
